@@ -1,0 +1,7 @@
+Validate inputs and preconditions early (guard clauses).
+
+Place happy-path logic last.
+
+Provide clear, user‑friendly error messages.
+
+Log or report unexpected errors.

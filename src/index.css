@@ -1,0 +1,267 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  
+  /* Logo animation that persists across navigation */
+  @keyframes logo-wobble {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(10deg); }
+    75% { transform: rotate(-10deg); }
+  }
+  
+  .logo-animation {
+    animation: logo-wobble 4s ease-in-out infinite;
+    animation-delay: 0s;
+  }
+  
+  body {
+    @apply bg-gray-950 text-gray-100;
+  }
+  
+  /* Better text rendering */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight text-white;
+  }
+  
+  p {
+    @apply text-gray-300 leading-relaxed;
+  }
+  
+  /* Make all text cleaner */
+  * {
+    @apply antialiased;
+  }
+  
+  
+  /* Remove number input arrows */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    display: none;
+  }
+  
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: none;
+  }
+}
+
+@layer components {
+  /* Glass morphism cards with better contrast */
+  .glass-card {
+    @apply bg-white/[0.02] backdrop-blur-xl border border-white/[0.05] shadow-2xl;
+  }
+  
+  /* Disable backdrop-filter during drag operations to prevent stacking context issues */
+  .dragging .glass-card:not(.dragging-active) {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  
+  /* Remove overflow clipping during drag operations */
+  .dragging [data-dropzone] {
+    overflow: visible !important;
+  }
+  
+  /* Ensure parent containers don't clip dragged elements */
+  .dragging .relative {
+    overflow: visible !important;
+  }
+  
+  /* Prevent grid containers from clipping */
+  .dragging .grid {
+    overflow: visible !important;
+  }
+  
+  /* Ensure main page containers don't clip dragged content */
+  .dragging .min-h-\[calc\(100vh-8rem\)\] {
+    overflow: visible !important;
+  }
+  
+  /* Ensure Layout containers don't clip dragged content */
+  .dragging .min-h-screen {
+    overflow: visible !important;
+  }
+  
+  /* Prevent main content container from clipping */
+  .dragging main {
+    overflow: visible !important;
+  }
+  
+  /* Specific containers that need overflow visible during drag */
+  .dragging .backdrop-blur-sm {
+    overflow: visible !important;
+  }
+  
+  /* Ensure dragged elements appear above everything during drag */
+  .dragging [data-draggable="true"] {
+    z-index: 100000 !important;
+    position: relative !important;
+  }
+  
+  /* Specific styling for currently dragging element */
+  .dragging-active {
+    z-index: 999999 !important;
+    position: relative !important;
+    pointer-events: auto !important;
+    opacity: 1 !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 2px solid rgba(59, 130, 246, 0.5) !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(59, 130, 246, 0.3) !important;
+  }
+  
+  /* Disable hover effects during drag operations to prevent interference */
+  .dragging .group:hover {
+    box-shadow: none !important;
+    border-color: inherit !important;
+  }
+  
+  /* Disable gradient overlay hover effects during drag */
+  .dragging .group:hover .bg-gradient-to-br {
+    background: transparent !important;
+  }
+  
+  /* Disable hover interactions on non-dragging elements */
+  .dragging .group:not(.dragging-active) {
+    pointer-events: none !important;
+  }
+  
+  /* Ensure dragging element maintains all interactions */
+  .dragging .dragging-active {
+    pointer-events: auto !important;
+    cursor: grabbing !important;
+  }
+  
+  /* Modern input styles */
+  .input-field {
+    @apply w-full px-4 py-3 bg-white/[0.05] border border-white/[0.08] rounded-xl text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500/50 focus:bg-white/[0.08] transition-all duration-200;
+  }
+  
+  /* Better button styles */
+  .btn-primary {
+    @apply bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium px-6 py-3 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transform hover:-translate-y-0.5 transition-all duration-200;
+  }
+}
+
+/* Custom utility classes */
+.text-gradient {
+  @apply bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent;
+}
+
+/* Better dark backgrounds */
+.bg-dark-300 {
+  background-color: #050505;
+  background-image: 
+    radial-gradient(at 50% 0%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+    radial-gradient(at 80% 50%, rgba(120, 119, 198, 0.05) 0%, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+}
+
+/* Custom Blue Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+  cursor: pointer !important;
+}
+
+::-webkit-scrollbar-track {
+  background: #111827;
+  border-radius: 10px;
+  cursor: pointer !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3b82f6;
+  border-radius: 10px;
+  border: 2px solid #111827;
+  cursor: grab !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #60a5fa;
+  cursor: grab !important;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: #2563eb;
+  cursor: grabbing !important;
+}
+
+::-webkit-scrollbar-corner {
+  background: #111827;
+  cursor: default !important;
+}
+
+/* Firefox scrollbar support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #3b82f6 #111827;
+}
+
+/* Override Tailwind scrollbar utilities with blue theme */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-thumb-white\/20::-webkit-scrollbar-thumb {
+  background: #3b82f6 !important;
+}
+
+.scrollbar-track-white\/5::-webkit-scrollbar-track {
+  background: #111827 !important;
+}
+
+/* Lighter scrollbar for Items to Pick section */
+.items-to-pick-scrollbar::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+  cursor: pointer !important;
+}
+
+.items-to-pick-scrollbar::-webkit-scrollbar-track {
+  background: #111827;
+  border-radius: 10px;
+  cursor: pointer !important;
+}
+
+.items-to-pick-scrollbar::-webkit-scrollbar-thumb {
+  background: #60a5fa; /* Lighter blue than main scrollbar (#3b82f6) */
+  border-radius: 10px;
+  border: 2px solid #111827;
+  cursor: grab !important;
+}
+
+.items-to-pick-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #93c5fd; /* Even lighter on hover */
+  cursor: grab !important;
+}
+
+.items-to-pick-scrollbar::-webkit-scrollbar-thumb:active {
+  background: #3b82f6; /* Same as main scrollbar when active */
+  cursor: grabbing !important;
+}
+
+.items-to-pick-scrollbar::-webkit-scrollbar-corner {
+  background: #111827;
+  cursor: default !important;
+}
+
+/* Firefox scrollbar support for Items to Pick */
+.items-to-pick-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #60a5fa #111827;
+}

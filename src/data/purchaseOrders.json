@@ -1,0 +1,86 @@
+{
+  "purchaseOrders": [
+    {
+      "id": "PO-2025-001",
+      "supplier": "TechSense Ltd",
+      "status": "pending",
+      "createdAt": "2025-06-28T10:00:00Z",
+      "expectedDate": "2025-07-05T09:00:00Z",
+      "items": [
+        {
+          "sku": "ARM-SENS-001",
+          "quantity": 200,
+          "receivedQuantity": 0,
+          "unitCost": 25.00
+        },
+        {
+          "sku": "ARM-DOOR-004",
+          "quantity": 500,
+          "receivedQuantity": 0,
+          "unitCost": 18.00
+        },
+        {
+          "sku": "ARM-PANIC-008",
+          "quantity": 200,
+          "receivedQuantity": 0,
+          "unitCost": 30.00
+        }
+      ],
+      "totalValue": 20000.00,
+      "notes": "Bulk order for Q3 stock replenishment"
+    },
+    {
+      "id": "PO-2025-002",
+      "supplier": "SoundAlert Inc",
+      "status": "receiving",
+      "createdAt": "2025-06-25T14:30:00Z",
+      "expectedDate": "2025-07-02T14:00:00Z",
+      "receiver": "USR004",
+      "items": [
+        {
+          "sku": "ARM-SIREN-002",
+          "quantity": 50,
+          "receivedQuantity": 32,
+          "unitCost": 85.00
+        }
+      ],
+      "totalValue": 4250.00,
+      "notes": "Partial shipment received"
+    },
+    {
+      "id": "PO-2025-003",
+      "supplier": "Interface Solutions",
+      "status": "completed",
+      "createdAt": "2025-06-20T09:15:00Z",
+      "expectedDate": "2025-06-30T09:00:00Z",
+      "completedDate": "2025-06-29T15:45:00Z",
+      "receiver": "USR004",
+      "items": [
+        {
+          "sku": "ARM-KEY-005",
+          "quantity": 100,
+          "receivedQuantity": 100,
+          "unitCost": 120.00
+        }
+      ],
+      "totalValue": 12000.00
+    },
+    {
+      "id": "PO-2025-004",
+      "supplier": "VisionTech Ltd",
+      "status": "pending",
+      "createdAt": "2025-07-01T11:00:00Z",
+      "expectedDate": "2025-07-08T10:00:00Z",
+      "items": [
+        {
+          "sku": "ARM-CAM-007",
+          "quantity": 75,
+          "receivedQuantity": 0,
+          "unitCost": 150.00
+        }
+      ],
+      "totalValue": 11250.00,
+      "notes": "New HD camera model with improved night vision"
+    }
+  ]
+}

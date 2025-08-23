@@ -1,0 +1,84 @@
+{
+  "achievements": [
+    {
+      "id": "ACH001",
+      "name": "First Steps",
+      "description": "Complete your first warehouse task",
+      "icon": "🎯",
+      "xpReward": 50,
+      "rarity": "common"
+    },
+    {
+      "id": "ACH002",
+      "name": "Speed Demon",
+      "description": "Pick 50 items in under 30 minutes",
+      "icon": "⚡",
+      "xpReward": 100,
+      "rarity": "uncommon"
+    },
+    {
+      "id": "ACH003",
+      "name": "Perfect Week",
+      "description": "Maintain 100% accuracy for a full week",
+      "icon": "✨",
+      "xpReward": 200,
+      "rarity": "rare"
+    },
+    {
+      "id": "ACH004",
+      "name": "Warehouse Master",
+      "description": "Reach Level 10",
+      "icon": "👑",
+      "xpReward": 500,
+      "rarity": "legendary"
+    },
+    {
+      "id": "ACH005",
+      "name": "Team Leader",
+      "description": "Help train 5 new team members",
+      "icon": "🎖️",
+      "xpReward": 300,
+      "rarity": "rare"
+    },
+    {
+      "id": "ACH006",
+      "name": "Pick Pro",
+      "description": "Complete 100 picking tasks",
+      "icon": "📍",
+      "xpReward": 150,
+      "rarity": "uncommon"
+    },
+    {
+      "id": "ACH007",
+      "name": "Pack Master",
+      "description": "Pack 100 orders perfectly",
+      "icon": "📦",
+      "xpReward": 150,
+      "rarity": "uncommon"
+    },
+    {
+      "id": "ACH008",
+      "name": "Receiving Expert",
+      "description": "Process 50 purchase orders",
+      "icon": "📥",
+      "xpReward": 150,
+      "rarity": "uncommon"
+    },
+    {
+      "id": "ACH009",
+      "name": "Stock Counter",
+      "description": "Complete 25 stock counts with 100% accuracy",
+      "icon": "🔢",
+      "xpReward": 200,
+      "rarity": "rare"
+    },
+    {
+      "id": "ACH010",
+      "name": "Return Specialist",
+      "description": "Process 50 returns",
+      "icon": "↩️",
+      "xpReward": 150,
+      "rarity": "uncommon"
+    }
+  ]
+}

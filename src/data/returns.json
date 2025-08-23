@@ -1,0 +1,68 @@
+{
+  "returns": [
+    {
+      "id": "RMA-2025-001",
+      "originalOrderId": "ORD-2025-005",
+      "customer": {
+        "name": "Tauranga Safety Solutions",
+        "email": "sales@taurangasafety.co.nz"
+      },
+      "status": "pending",
+      "createdAt": "2025-07-02T10:00:00Z",
+      "reason": "Wrong item shipped",
+      "items": [
+        {
+          "sku": "ARM-SMOKE-006",
+          "quantity": 2,
+          "condition": null,
+          "disposition": null
+        }
+      ]
+    },
+    {
+      "id": "RMA-2025-002",
+      "originalOrderId": "ORD-2025-004",
+      "customer": {
+        "name": "Hamilton Security Pro",
+        "email": "contact@hamiltonpro.co.nz"
+      },
+      "status": "processing",
+      "createdAt": "2025-07-01T14:30:00Z",
+      "receivedAt": "2025-07-02T09:00:00Z",
+      "processedBy": "USR004",
+      "reason": "Defective unit",
+      "items": [
+        {
+          "sku": "ARM-KEY-005",
+          "quantity": 1,
+          "condition": "D-Grade",
+          "disposition": "write-off",
+          "notes": "LCD screen not functioning"
+        }
+      ]
+    },
+    {
+      "id": "RMA-2025-003",
+      "originalOrderId": "ORD-2025-003",
+      "customer": {
+        "name": "Christchurch Safe & Sound",
+        "email": "orders@chcsafe.co.nz"
+      },
+      "status": "completed",
+      "createdAt": "2025-06-28T11:00:00Z",
+      "receivedAt": "2025-06-29T10:30:00Z",
+      "completedAt": "2025-06-29T14:00:00Z",
+      "processedBy": "USR004",
+      "reason": "Customer changed mind",
+      "items": [
+        {
+          "sku": "ARM-PANIC-008",
+          "quantity": 2,
+          "condition": "A-Grade",
+          "disposition": "return-to-stock",
+          "returnedToBin": "A-03-04"
+        }
+      ]
+    }
+  ]
+}

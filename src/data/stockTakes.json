@@ -1,0 +1,48 @@
+{
+  "stockTakes": [
+    {
+      "id": "ST-2025-001",
+      "type": "cycle",
+      "status": "in_progress",
+      "createdBy": "USR001",
+      "assignedTo": ["USR002", "USR004"],
+      "createdAt": "2025-07-02T06:00:00Z",
+      "bins": ["A-01-02", "A-02-05", "A-03-04"],
+      "counts": [
+        {
+          "bin": "A-01-02",
+          "sku": "ARM-SENS-001",
+          "systemQuantity": 45,
+          "countedQuantity": 44,
+          "countedBy": "USR002",
+          "countedAt": "2025-07-02T08:15:00Z",
+          "variance": -1,
+          "notes": "One unit damaged, moved to write-off"
+        },
+        {
+          "bin": "A-02-05",
+          "sku": "ARM-DOOR-004",
+          "systemQuantity": 150,
+          "countedQuantity": null,
+          "countedBy": null,
+          "countedAt": null,
+          "variance": null
+        }
+      ]
+    },
+    {
+      "id": "ST-2025-002",
+      "type": "annual",
+      "status": "completed",
+      "createdBy": "USR001",
+      "assignedTo": ["USR002", "USR003", "USR004"],
+      "createdAt": "2025-06-01T06:00:00Z",
+      "completedAt": "2025-06-03T18:30:00Z",
+      "summary": {
+        "totalBinsCounted": 50,
+        "totalVariance": 12,
+        "accuracyRate": 99.2
+      }
+    }
+  ]
+}

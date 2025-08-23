@@ -1,0 +1,148 @@
+{
+  "products": [
+    {
+      "sku": "ARM-SENS-001",
+      "name": "PIR Motion Sensor",
+      "description": "Passive infrared motion detector with pet immunity",
+      "category": "Sensors",
+      "price": 45.00,
+      "weight": 0.15,
+      "dimensions": {
+        "length": 10,
+        "width": 8,
+        "height": 5
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=PIR+Sensor",
+      "barcode": "9421234567890",
+      "reorderPoint": 50,
+      "reorderQuantity": 200,
+      "supplier": "TechSense Ltd"
+    },
+    {
+      "sku": "ARM-SIREN-002",
+      "name": "Outdoor Siren 120dB",
+      "description": "Weather-resistant outdoor siren with strobe light",
+      "category": "Sirens",
+      "price": 125.00,
+      "weight": 1.2,
+      "dimensions": {
+        "length": 25,
+        "width": 20,
+        "height": 15
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Outdoor+Siren",
+      "barcode": "9421234567891",
+      "reorderPoint": 20,
+      "reorderQuantity": 50,
+      "supplier": "SoundAlert Inc"
+    },
+    {
+      "sku": "ARM-CTRL-003",
+      "name": "Smart Control Panel",
+      "description": "WiFi-enabled alarm control panel with app integration",
+      "category": "Control Panels",
+      "price": 450.00,
+      "weight": 2.5,
+      "dimensions": {
+        "length": 30,
+        "width": 25,
+        "height": 8
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Control+Panel",
+      "barcode": "9421234567892",
+      "reorderPoint": 10,
+      "reorderQuantity": 25,
+      "supplier": "Arrowhead Manufacturing"
+    },
+    {
+      "sku": "ARM-DOOR-004",
+      "name": "Magnetic Door Contact",
+      "description": "Wireless door/window contact sensor",
+      "category": "Sensors",
+      "price": 35.00,
+      "weight": 0.08,
+      "dimensions": {
+        "length": 8,
+        "width": 3,
+        "height": 2
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Door+Contact",
+      "barcode": "9421234567893",
+      "reorderPoint": 100,
+      "reorderQuantity": 500,
+      "supplier": "TechSense Ltd"
+    },
+    {
+      "sku": "ARM-KEY-005",
+      "name": "LCD Keypad",
+      "description": "Backlit LCD keypad with proximity reader",
+      "category": "Keypads",
+      "price": 185.00,
+      "weight": 0.5,
+      "dimensions": {
+        "length": 15,
+        "width": 12,
+        "height": 3
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=LCD+Keypad",
+      "barcode": "9421234567894",
+      "reorderPoint": 30,
+      "reorderQuantity": 100,
+      "supplier": "Interface Solutions"
+    },
+    {
+      "sku": "ARM-SMOKE-006",
+      "name": "Photoelectric Smoke Detector",
+      "description": "Wireless smoke detector with 10-year battery",
+      "category": "Life Safety",
+      "price": 65.00,
+      "weight": 0.2,
+      "dimensions": {
+        "length": 12,
+        "width": 12,
+        "height": 5
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Smoke+Detector",
+      "barcode": "9421234567895",
+      "reorderPoint": 40,
+      "reorderQuantity": 150,
+      "supplier": "SafetyFirst Corp"
+    },
+    {
+      "sku": "ARM-CAM-007",
+      "name": "HD Security Camera",
+      "description": "1080p WiFi security camera with night vision",
+      "category": "Cameras",
+      "price": 225.00,
+      "weight": 0.8,
+      "dimensions": {
+        "length": 15,
+        "width": 10,
+        "height": 10
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Security+Camera",
+      "barcode": "9421234567896",
+      "reorderPoint": 25,
+      "reorderQuantity": 75,
+      "supplier": "VisionTech Ltd"
+    },
+    {
+      "sku": "ARM-PANIC-008",
+      "name": "Wireless Panic Button",
+      "description": "Portable emergency panic button",
+      "category": "Accessories",
+      "price": 55.00,
+      "weight": 0.05,
+      "dimensions": {
+        "length": 6,
+        "width": 4,
+        "height": 2
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Panic+Button",
+      "barcode": "9421234567897",
+      "reorderPoint": 50,
+      "reorderQuantity": 200,
+      "supplier": "TechSense Ltd"
+    }
+  ]
+}

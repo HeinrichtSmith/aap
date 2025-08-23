@@ -1,0 +1,559 @@
+{
+  "bins": [
+    {
+      "id": "A-01-01",
+      "zone": "A",
+      "row": "01",
+      "shelf": "01",
+      "type": "small",
+      "capacity": 100,
+      "currentStock": [
+        {
+          "sku": "ARM-SENS-001",
+          "quantity": 45,
+          "lastUpdated": "2025-07-02T08:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "A-01-02",
+      "zone": "A",
+      "row": "01",
+      "shelf": "02",
+      "type": "small",
+      "capacity": 200,
+      "currentStock": [
+        {
+          "sku": "ARM-DOOR-004",
+          "quantity": 150,
+          "lastUpdated": "2025-07-01T14:30:00Z"
+        }
+      ]
+    },
+    {
+      "id": "A-01-03",
+      "zone": "A",
+      "row": "01",
+      "shelf": "03",
+      "type": "small",
+      "capacity": 150,
+      "currentStock": [
+        {
+          "sku": "ARM-PANIC-008",
+          "quantity": 82,
+          "lastUpdated": "2025-07-02T09:15:00Z"
+        }
+      ]
+    },
+    {
+      "id": "A-01-04",
+      "zone": "A",
+      "row": "01",
+      "shelf": "04",
+      "type": "medium",
+      "capacity": 150,
+      "currentStock": []
+    },
+    {
+      "id": "A-01-05",
+      "zone": "A",
+      "row": "01",
+      "shelf": "05",
+      "type": "small",
+      "capacity": 100,
+      "currentStock": [
+        {
+          "sku": "ARM-RELAY-016",
+          "quantity": 65,
+          "lastUpdated": "2025-07-02T09:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "B-01-01",
+      "zone": "B",
+      "row": "01",
+      "shelf": "01",
+      "type": "overflow",
+      "capacity": 300,
+      "currentStock": []
+    },
+    {
+      "id": "B-02-01",
+      "zone": "B",
+      "row": "02",
+      "shelf": "01",
+      "type": "medium",
+      "capacity": 150,
+      "currentStock": []
+    },
+    {
+      "id": "B-03-01",
+      "zone": "B",
+      "row": "03",
+      "shelf": "01",
+      "type": "large",
+      "capacity": 50,
+      "currentStock": [
+        {
+          "sku": "ARM-CTRL-003",
+          "quantity": 12,
+          "lastUpdated": "2025-06-30T16:20:00Z"
+        }
+      ]
+    },
+    {
+      "id": "B-04-01",
+      "zone": "B",
+      "row": "04",
+      "shelf": "01",
+      "type": "medium",
+      "capacity": 120,
+      "currentStock": []
+    },
+    {
+      "id": "B-05-01",
+      "zone": "B",
+      "row": "05",
+      "shelf": "01",
+      "type": "small",
+      "capacity": 100,
+      "currentStock": []
+    },
+    {
+      "id": "C-01-01",
+      "zone": "C",
+      "row": "01",
+      "shelf": "01",
+      "type": "medium",
+      "capacity": 150,
+      "currentStock": []
+    },
+    {
+      "id": "C-02-01",
+      "zone": "C",
+      "row": "02",
+      "shelf": "01",
+      "type": "small",
+      "capacity": 100,
+      "currentStock": []
+    },
+    {
+      "id": "C-03-01",
+      "zone": "C",
+      "row": "03",
+      "shelf": "01",
+      "type": "large",
+      "capacity": 80,
+      "currentStock": []
+    },
+    {
+      "id": "C-04-01",
+      "zone": "C",
+      "row": "04",
+      "shelf": "01",
+      "type": "medium",
+      "capacity": 120,
+      "currentStock": []
+    },
+    {
+      "id": "C-05-01",
+      "zone": "C",
+      "row": "05",
+      "shelf": "01",
+      "type": "small",
+      "capacity": 150,
+      "currentStock": []
+    },
+    {
+      "id": "C-06-01",
+      "zone": "C",
+      "row": "06",
+      "shelf": "01",
+      "type": "medium",
+      "capacity": 120,
+      "currentStock": []
+    },
+    {
+      "id": "D-01-01",
+      "zone": "D",
+      "row": "01",
+      "shelf": "01",
+      "type": "medium",
+      "capacity": 120,
+      "currentStock": []
+    },
+    {
+      "id": "D-02-01",
+      "zone": "D",
+      "row": "02",
+      "shelf": "01",
+      "type": "large",
+      "capacity": 80,
+      "currentStock": []
+    },
+    {
+      "id": "D-03-01",
+      "zone": "D",
+      "row": "03",
+      "shelf": "01",
+      "type": "medium",
+      "capacity": 100,
+      "currentStock": []
+    },
+    {
+      "id": "D-04-01",
+      "zone": "D",
+      "row": "04",
+      "shelf": "01",
+      "type": "small",
+      "capacity": 200,
+      "currentStock": []
+    },
+    {
+      "id": "D-05-01",
+      "zone": "D",
+      "row": "05",
+      "shelf": "01",
+      "type": "medium",
+      "capacity": 150,
+      "currentStock": []
+    },
+    {
+      "id": "E-01-01",
+      "zone": "E",
+      "row": "01",
+      "shelf": "01",
+      "type": "small",
+      "capacity": 100,
+      "currentStock": []
+    },
+    {
+      "id": "E-02-01",
+      "zone": "E",
+      "row": "02",
+      "shelf": "01",
+      "type": "medium",
+      "capacity": 120,
+      "currentStock": []
+    },
+    {
+      "id": "E-03-01",
+      "zone": "E",
+      "row": "03",
+      "shelf": "01",
+      "type": "large",
+      "capacity": 40,
+      "currentStock": [
+        {
+          "sku": "ARM-SIREN-002",
+          "quantity": 28,
+          "lastUpdated": "2025-06-29T13:30:00Z"
+        }
+      ]
+    },
+    {
+      "id": "E-04-01",
+      "zone": "E",
+      "row": "04",
+      "shelf": "01",
+      "type": "medium",
+      "capacity": 150,
+      "currentStock": []
+    },
+    {
+      "id": "E-05-01",
+      "zone": "E",
+      "row": "05",
+      "shelf": "01",
+      "type": "small",
+      "capacity": 180,
+      "currentStock": []
+    },
+    {
+      "id": "E-06-01",
+      "zone": "E",
+      "row": "06",
+      "shelf": "01",
+      "type": "medium",
+      "capacity": 100,
+      "currentStock": []
+    },
+    {
+      "id": "F-01-01",
+      "zone": "F",
+      "row": "01",
+      "shelf": "01",
+      "type": "medium",
+      "capacity": 100,
+      "currentStock": []
+    },
+    {
+      "id": "F-02-01",
+      "zone": "F",
+      "row": "02",
+      "shelf": "01",
+      "type": "large",
+      "capacity": 80,
+      "currentStock": []
+    },
+    {
+      "id": "F-03-01",
+      "zone": "F",
+      "row": "03",
+      "shelf": "01",
+      "type": "small",
+      "capacity": 150,
+      "currentStock": []
+    },
+    {
+      "id": "F-04-01",
+      "zone": "F",
+      "row": "04",
+      "shelf": "01",
+      "type": "medium",
+      "capacity": 120,
+      "currentStock": []
+    },
+    {
+      "id": "F-05-01",
+      "zone": "F",
+      "row": "05",
+      "shelf": "01",
+      "type": "overflow",
+      "capacity": 300,
+      "currentStock": []
+    },
+    {
+      "id": "F-06-01",
+      "zone": "F",
+      "row": "06",
+      "shelf": "01",
+      "type": "small",
+      "capacity": 150,
+      "currentStock": []
+    },
+    {
+      "id": "G-01-01",
+      "zone": "G",
+      "row": "01",
+      "shelf": "01",
+      "type": "medium",
+      "capacity": 120,
+      "currentStock": [
+        {
+          "sku": "ARM-LOCK-009",
+          "quantity": 78,
+          "lastUpdated": "2025-07-02T10:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "G-02-02",
+      "zone": "G",
+      "row": "02",
+      "shelf": "02",
+      "type": "small",
+      "capacity": 150,
+      "currentStock": [
+        {
+          "sku": "ARM-MOTION-010",
+          "quantity": 92,
+          "lastUpdated": "2025-07-01T15:30:00Z"
+        }
+      ]
+    },
+    {
+      "id": "G-03-03",
+      "zone": "G",
+      "row": "03",
+      "shelf": "03",
+      "type": "medium",
+      "capacity": 100,
+      "currentStock": []
+    },
+    {
+      "id": "G-04-01",
+      "zone": "G",
+      "row": "04",
+      "shelf": "01",
+      "type": "large",
+      "capacity": 80,
+      "currentStock": []
+    },
+    {
+      "id": "G-05-01",
+      "zone": "G",
+      "row": "05",
+      "shelf": "01",
+      "type": "small",
+      "capacity": 200,
+      "currentStock": []
+    },
+    {
+      "id": "G-06-01",
+      "zone": "G",
+      "row": "06",
+      "shelf": "01",
+      "type": "medium",
+      "capacity": 120,
+      "currentStock": []
+    },
+    {
+      "id": "H-01-02",
+      "zone": "H",
+      "row": "01",
+      "shelf": "02",
+      "type": "large",
+      "capacity": 80,
+      "currentStock": [
+        {
+          "sku": "ARM-PANEL-011",
+          "quantity": 45,
+          "lastUpdated": "2025-07-02T11:15:00Z"
+        }
+      ]
+    },
+    {
+      "id": "H-02-01",
+      "zone": "H",
+      "row": "02",
+      "shelf": "01",
+      "type": "medium",
+      "capacity": 120,
+      "currentStock": [
+        {
+          "sku": "ARM-READER-012",
+          "quantity": 88,
+          "lastUpdated": "2025-07-01T12:45:00Z"
+        }
+      ]
+    },
+    {
+      "id": "H-03-02",
+      "zone": "H",
+      "row": "03",
+      "shelf": "02",
+      "type": "small",
+      "capacity": 200,
+      "currentStock": []
+    },
+    {
+      "id": "H-04-01",
+      "zone": "H",
+      "row": "04",
+      "shelf": "01",
+      "type": "medium",
+      "capacity": 150,
+      "currentStock": []
+    },
+    {
+      "id": "H-05-01",
+      "zone": "H",
+      "row": "05",
+      "shelf": "01",
+      "type": "large",
+      "capacity": 80,
+      "currentStock": []
+    },
+    {
+      "id": "H-06-01",
+      "zone": "H",
+      "row": "06",
+      "shelf": "01",
+      "type": "small",
+      "capacity": 100,
+      "currentStock": []
+    },
+    {
+      "id": "I-01-01",
+      "zone": "I",
+      "row": "01",
+      "shelf": "01",
+      "type": "large",
+      "capacity": 60,
+      "currentStock": [
+        {
+          "sku": "ARM-BATTERY-013",
+          "quantity": 34,
+          "lastUpdated": "2025-07-02T08:30:00Z"
+        }
+      ]
+    },
+    {
+      "id": "I-02-03",
+      "zone": "I",
+      "row": "02",
+      "shelf": "03",
+      "type": "medium",
+      "capacity": 100,
+      "currentStock": [
+        {
+          "sku": "ARM-CABLE-014",
+          "quantity": 156,
+          "lastUpdated": "2025-07-01T16:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "I-03-01",
+      "zone": "I",
+      "row": "03",
+      "shelf": "01",
+      "type": "overflow",
+      "capacity": 400,
+      "currentStock": []
+    },
+    {
+      "id": "I-04-02",
+      "zone": "I",
+      "row": "04",
+      "shelf": "02",
+      "type": "small",
+      "capacity": 180,
+      "currentStock": [
+        {
+          "sku": "ARM-SWITCH-015",
+          "quantity": 112,
+          "lastUpdated": "2025-06-30T14:15:00Z"
+        }
+      ]
+    },
+    {
+      "id": "I-05-01",
+      "zone": "I",
+      "row": "05",
+      "shelf": "01",
+      "type": "medium",
+      "capacity": 120,
+      "currentStock": []
+    },
+    {
+      "id": "I-06-01",
+      "zone": "I",
+      "row": "06",
+      "shelf": "01",
+      "type": "large",
+      "capacity": 100,
+      "currentStock": []
+    },
+    {
+      "id": "I-07-01",
+      "zone": "I",
+      "row": "07",
+      "shelf": "01",
+      "type": "small",
+      "capacity": 150,
+      "currentStock": []
+    },
+    {
+      "id": "I-08-01",
+      "zone": "I",
+      "row": "08",
+      "shelf": "01",
+      "type": "overflow",
+      "capacity": 500,
+      "currentStock": []
+    }
+  ]
+}

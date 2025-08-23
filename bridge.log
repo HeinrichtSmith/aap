@@ -1,0 +1,22 @@
+🚀 Cursor AI Bridge Server running on:
+   HTTP API: http://localhost:8080/api
+   WebSocket: ws://localhost:8080/ws
+
+📝 Instructions:
+1. Your website chatbot will connect to this bridge
+2. When you request code changes, check cursor-instructions.md
+3. Make changes in Cursor, then create cursor-response.md
+4. The bridge will send the response back to your website
+
+✅ Website connected to bridge
+📨 Received from website: {
+  type: 'command',
+  message: 'make header icon smaller',
+  timestamp: '2025-07-12T22:52:12.650Z'
+}
+📝 Checking message: "make header icon smaller"
+   Is code request: true
+Could not auto-open in Cursor: Command failed: cursor "/home/heinricht/Downloads/drive-download-20250711T092821Z-1-001/cursor-instructions.md"
+/bin/sh: 1: cursor: not found
+
+🔌 Website disconnected

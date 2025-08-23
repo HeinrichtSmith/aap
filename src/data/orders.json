@@ -1,0 +1,643 @@
+{
+  "orders": [
+    {
+      "id": "SO4329",
+      "customer": {
+        "name": "Auckland Security Services",
+        "email": "orders@aucklandsec.co.nz",
+        "phone": "+64 9 555 1234"
+      },
+      "status": "pending",
+      "priority": "overnight",
+      "createdAt": "2025-07-02T08:30:00Z",
+      "requiredBy": "2025-07-03T17:00:00Z",
+      "items": [
+        {
+          "sku": "ARM-SENS-001",
+          "quantity": 5,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "A-01-02"
+        },
+        {
+          "sku": "ARM-CTRL-003",
+          "quantity": 1,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "B-03-01"
+        },
+        {
+          "sku": "ARM-KEY-005",
+          "quantity": 2,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "C-02-03"
+        }
+      ],
+      "shippingAddress": {
+        "street": "123 Queen Street",
+        "city": "Auckland",
+        "postcode": "1010",
+        "country": "New Zealand"
+      },
+      "notes": "Customer will collect if ready early"
+    },
+    {
+      "id": "SO4330",
+      "customer": {
+        "name": "Wellington Home Protection",
+        "email": "info@wellyhome.co.nz",
+        "phone": "+64 4 555 5678"
+      },
+      "status": "picking",
+      "priority": "normal",
+      "createdAt": "2025-07-02T09:15:00Z",
+      "requiredBy": "2025-07-04T17:00:00Z",
+      "assignedPicker": "USR002",
+      "items": [
+        {
+          "sku": "ARM-DOOR-004",
+          "quantity": 10,
+          "pickedQuantity": 8,
+          "packedQuantity": 0,
+          "location": "A-02-05"
+        },
+        {
+          "sku": "ARM-SMOKE-006",
+          "quantity": 3,
+          "pickedQuantity": 3,
+          "packedQuantity": 0,
+          "location": "D-01-02"
+        }
+      ],
+      "shippingAddress": {
+        "street": "456 Lambton Quay",
+        "city": "Wellington",
+        "postcode": "6011",
+        "country": "New Zealand"
+      }
+    },
+    {
+      "id": "SO4331",
+      "customer": {
+        "name": "Christchurch Safe & Sound",
+        "email": "orders@chcsafe.co.nz",
+        "phone": "+64 3 555 9012"
+      },
+      "status": "ready_to_pack",
+      "priority": "normal",
+      "createdAt": "2025-07-01T14:20:00Z",
+      "requiredBy": "2025-07-03T17:00:00Z",
+      "assignedPicker": "USR002",
+      "items": [
+        {
+          "sku": "ARM-SIREN-002",
+          "quantity": 2,
+          "pickedQuantity": 2,
+          "packedQuantity": 0,
+          "location": "E-03-01"
+        },
+        {
+          "sku": "ARM-CAM-007",
+          "quantity": 4,
+          "pickedQuantity": 4,
+          "packedQuantity": 0,
+          "location": "F-02-02"
+        },
+        {
+          "sku": "ARM-PANIC-008",
+          "quantity": 6,
+          "pickedQuantity": 6,
+          "packedQuantity": 0,
+          "location": "A-03-04"
+        }
+      ],
+      "shippingAddress": {
+        "street": "789 Colombo Street",
+        "city": "Christchurch",
+        "postcode": "8013",
+        "country": "New Zealand"
+      }
+    },
+    {
+      "id": "SO4332",
+      "customer": {
+        "name": "Hamilton Security Pro",
+        "email": "contact@hamiltonpro.co.nz",
+        "phone": "+64 7 555 3456"
+      },
+      "status": "packed",
+      "priority": "normal",
+      "createdAt": "2025-07-01T10:45:00Z",
+      "requiredBy": "2025-07-02T17:00:00Z",
+      "assignedPicker": "USR002",
+      "assignedPacker": "USR003",
+      "items": [
+        {
+          "sku": "ARM-SENS-001",
+          "quantity": 8,
+          "pickedQuantity": 8,
+          "packedQuantity": 8,
+          "location": "A-01-02"
+        },
+        {
+          "sku": "ARM-KEY-005",
+          "quantity": 1,
+          "pickedQuantity": 1,
+          "packedQuantity": 1,
+          "location": "C-02-03"
+        }
+      ],
+      "shippingAddress": {
+        "street": "321 Victoria Street",
+        "city": "Hamilton",
+        "postcode": "3204",
+        "country": "New Zealand"
+      },
+      "packageType": "0.03",
+      "trackingNumber": "NZ123456789",
+      "packedAt": "2025-07-02T11:30:00Z"
+    },
+    {
+      "id": "SO4333",
+      "customer": {
+        "name": "Tauranga Safety Solutions",
+        "email": "sales@taurangasafety.co.nz",
+        "phone": "+64 7 555 7890"
+      },
+      "status": "shipped",
+      "priority": "low",
+      "createdAt": "2025-06-30T15:30:00Z",
+      "requiredBy": "2025-07-05T17:00:00Z",
+      "assignedPicker": "USR002",
+      "assignedPacker": "USR003",
+      "items": [
+        {
+          "sku": "ARM-CTRL-003",
+          "quantity": 2,
+          "pickedQuantity": 2,
+          "packedQuantity": 2,
+          "location": "B-03-01"
+        },
+        {
+          "sku": "ARM-SMOKE-006",
+          "quantity": 5,
+          "pickedQuantity": 5,
+          "packedQuantity": 5,
+          "location": "D-01-02"
+        },
+        {
+          "sku": "ARM-DOOR-004",
+          "quantity": 15,
+          "pickedQuantity": 15,
+          "packedQuantity": 15,
+          "location": "A-02-05"
+        }
+      ],
+      "shippingAddress": {
+        "street": "654 Cameron Road",
+        "city": "Tauranga",
+        "postcode": "3110",
+        "country": "New Zealand"
+      },
+      "packageType": "0.05",
+      "trackingNumber": "NZ987654321",
+      "packedAt": "2025-07-01T09:15:00Z",
+      "shippedAt": "2025-07-01T14:00:00Z"
+    },
+    {
+      "id": "SO4334",
+      "customer": {
+        "name": "Dunedin Security Systems",
+        "email": "orders@dunedinSec.co.nz",
+        "phone": "+64 3 555 2468"
+      },
+      "status": "pending",
+      "priority": "urgent",
+      "createdAt": "2025-07-02T11:45:00Z",
+      "requiredBy": "2025-07-02T17:00:00Z",
+      "items": [
+        {
+          "sku": "ARM-CAM-007",
+          "quantity": 12,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "F-02-02",
+          "name": "Security Camera HD",
+          "barcode": "CAM007001"
+        },
+        {
+          "sku": "ARM-PANIC-008", 
+          "quantity": 3,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "A-03-04",
+          "name": "Panic Button",
+          "barcode": "PAN008001"
+        },
+        {
+          "sku": "ARM-SENS-001",
+          "quantity": 6,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "A-01-02",
+          "name": "Motion Sensor",
+          "barcode": "SEN001001"
+        }
+      ],
+      "shippingAddress": {
+        "street": "88 George Street",
+        "city": "Dunedin",
+        "postcode": "9016",
+        "country": "New Zealand"
+      },
+      "notes": "URGENT - Same day delivery required"
+    },
+    {
+      "id": "SO4335",
+      "customer": {
+        "name": "Palmerston North Office Security",
+        "email": "admin@pnofficesec.co.nz",
+        "phone": "+64 6 555 1357"
+      },
+      "status": "pending",
+      "priority": "overnight",
+      "createdAt": "2025-07-02T13:20:00Z",
+      "requiredBy": "2025-07-03T12:00:00Z",
+      "items": [
+        {
+          "sku": "ARM-DOOR-004",
+          "quantity": 8,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "A-02-05",
+          "name": "Door Sensor",
+          "barcode": "DOO004001"
+        },
+        {
+          "sku": "ARM-KEY-005",
+          "quantity": 4,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "C-02-03",
+          "name": "Key Fob",
+          "barcode": "KEY005001"
+        }
+      ],
+      "shippingAddress": {
+        "street": "145 Main Street",
+        "city": "Palmerston North",
+        "postcode": "4410",
+        "country": "New Zealand"
+      }
+    },
+    {
+      "id": "SO4336",
+      "customer": {
+        "name": "New Plymouth Business Security",
+        "email": "orders@npbusiness.co.nz",
+        "phone": "+64 6 555 8642"
+      },
+      "status": "pending",
+      "priority": "normal",
+      "createdAt": "2025-07-02T15:30:00Z",
+      "requiredBy": "2025-07-05T17:00:00Z",
+      "items": [
+        {
+          "sku": "ARM-CAM-007",
+          "quantity": 20,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "F-02-02",
+          "name": "Security Camera HD",
+          "barcode": "CAM007001"
+        },
+        {
+          "sku": "ARM-DOOR-004",
+          "quantity": 25,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "A-02-05",
+          "name": "Door Sensor",
+          "barcode": "DOO004001"
+        },
+        {
+          "sku": "ARM-SENS-001",
+          "quantity": 18,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "A-01-02",
+          "name": "Motion Sensor",
+          "barcode": "SEN001001"
+        },
+        {
+          "sku": "ARM-CTRL-003",
+          "quantity": 3,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "B-03-01",
+          "name": "Control Panel",
+          "barcode": "CTR003001"
+        }
+      ],
+      "shippingAddress": {
+        "street": "210 Devon Street East",
+        "city": "New Plymouth",
+        "postcode": "4312",
+        "country": "New Zealand"
+      },
+      "notes": "Large business installation - coordinate delivery"
+    },
+    {
+      "id": "SO4337",
+      "customer": {
+        "name": "Auckland Mega Mall Security",
+        "email": "security@aucklandmega.co.nz",
+        "phone": "+64 9 555 0000"
+      },
+      "status": "pending",
+      "priority": "normal",
+      "createdAt": "2025-07-02T16:00:00Z",
+      "requiredBy": "2025-07-06T17:00:00Z",
+      "items": [
+        {
+          "sku": "ARM-SENS-001",
+          "quantity": 12,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "A-01-02",
+          "name": "Motion Sensor",
+          "barcode": "SEN001001"
+        },
+        {
+          "sku": "ARM-SENS-002",
+          "quantity": 8,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "A-01-03",
+          "name": "PIR Motion Detector",
+          "barcode": "SEN002001"
+        },
+        {
+          "sku": "ARM-DOOR-004",
+          "quantity": 15,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "A-02-05",
+          "name": "Door Sensor",
+          "barcode": "DOO004001"
+        },
+        {
+          "sku": "ARM-DOOR-005",
+          "quantity": 10,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "A-02-06",
+          "name": "Magnetic Door Contact",
+          "barcode": "DOO005001"
+        },
+        {
+          "sku": "ARM-CAM-007",
+          "quantity": 20,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "F-02-02",
+          "name": "Security Camera HD",
+          "barcode": "CAM007001"
+        },
+        {
+          "sku": "ARM-CAM-008",
+          "quantity": 6,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "F-02-03",
+          "name": "Dome Security Camera",
+          "barcode": "CAM008001"
+        },
+        {
+          "sku": "ARM-CAM-009",
+          "quantity": 4,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "F-02-04",
+          "name": "PTZ Security Camera",
+          "barcode": "CAM009001"
+        },
+        {
+          "sku": "ARM-CTRL-003",
+          "quantity": 3,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "B-03-01",
+          "name": "Control Panel",
+          "barcode": "CTR003001"
+        },
+        {
+          "sku": "ARM-CTRL-010",
+          "quantity": 2,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "B-03-02",
+          "name": "Smart Control Panel",
+          "barcode": "CTR010001"
+        },
+        {
+          "sku": "ARM-KEY-005",
+          "quantity": 25,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "C-02-03",
+          "name": "Key Fob",
+          "barcode": "KEY005001"
+        },
+        {
+          "sku": "ARM-KEY-011",
+          "quantity": 15,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "C-02-04",
+          "name": "LCD Keypad",
+          "barcode": "KEY011001"
+        },
+        {
+          "sku": "ARM-KEY-012",
+          "quantity": 8,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "C-02-05",
+          "name": "Proximity Reader",
+          "barcode": "KEY012001"
+        },
+        {
+          "sku": "ARM-SIREN-002",
+          "quantity": 6,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "E-03-01",
+          "name": "Outdoor Siren",
+          "barcode": "SIR002001"
+        },
+        {
+          "sku": "ARM-SIREN-013",
+          "quantity": 4,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "E-03-02",
+          "name": "Indoor Siren",
+          "barcode": "SIR013001"
+        },
+        {
+          "sku": "ARM-SMOKE-006",
+          "quantity": 18,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "D-01-02",
+          "name": "Smoke Detector",
+          "barcode": "SMO006001"
+        },
+        {
+          "sku": "ARM-SMOKE-014",
+          "quantity": 12,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "D-01-03",
+          "name": "Photoelectric Smoke Detector",
+          "barcode": "SMO014001"
+        },
+        {
+          "sku": "ARM-PANIC-008",
+          "quantity": 10,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "A-03-04",
+          "name": "Panic Button",
+          "barcode": "PAN008001"
+        },
+        {
+          "sku": "ARM-PANIC-015",
+          "quantity": 5,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "A-03-05",
+          "name": "Emergency Panic Button",
+          "barcode": "PAN015001"
+        },
+        {
+          "sku": "NET-SW-016",
+          "quantity": 3,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "G-01-01",
+          "name": "Network Switch 8-Port",
+          "barcode": "NET016001"
+        },
+        {
+          "sku": "NET-SW-017",
+          "quantity": 2,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "G-01-02",
+          "name": "PoE Network Switch",
+          "barcode": "NET017001"
+        },
+        {
+          "sku": "ACC-KIT-018",
+          "quantity": 6,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "H-01-01",
+          "name": "Touch Kit Interface",
+          "barcode": "ACC018001"
+        },
+        {
+          "sku": "ACC-KIT-019",
+          "quantity": 4,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "H-01-02",
+          "name": "Installation Kit",
+          "barcode": "ACC019001"
+        },
+        {
+          "sku": "BAT-UPS-020",
+          "quantity": 8,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "I-01-01",
+          "name": "Backup Battery 12V",
+          "barcode": "BAT020001"
+        },
+        {
+          "sku": "BAT-UPS-021",
+          "quantity": 4,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "I-01-02",
+          "name": "UPS Power Supply",
+          "barcode": "BAT021001"
+        },
+        {
+          "sku": "CBL-CAT6-022",
+          "quantity": 50,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "J-01-01",
+          "name": "CAT6 Cable 100m",
+          "barcode": "CBL022001"
+        },
+        {
+          "sku": "CBL-PWR-023",
+          "quantity": 30,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "J-01-02",
+          "name": "Power Cable 20m",
+          "barcode": "CBL023001"
+        },
+        {
+          "sku": "MNT-BRK-024",
+          "quantity": 20,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "K-01-01",
+          "name": "Wall Mount Bracket",
+          "barcode": "MNT024001"
+        },
+        {
+          "sku": "MNT-BRK-025",
+          "quantity": 15,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "K-01-02",
+          "name": "Ceiling Mount Bracket",
+          "barcode": "MNT025001"
+        },
+        {
+          "sku": "SIG-AMP-026",
+          "quantity": 5,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "L-01-01",
+          "name": "Signal Amplifier",
+          "barcode": "SIG026001"
+        },
+        {
+          "sku": "PWR-SUP-027",
+          "quantity": 12,
+          "pickedQuantity": 0,
+          "packedQuantity": 0,
+          "location": "M-01-01",
+          "name": "Power Supply 12V 5A",
+          "barcode": "PWR027001"
+        }
+      ],
+      "shippingAddress": {
+        "street": "500 Queen Street",
+        "city": "Auckland",
+        "postcode": "1010",
+        "country": "New Zealand"
+      },
+      "notes": "Large mall installation - 30 different security components required for comprehensive system upgrade"
+    }
+  ]
+}

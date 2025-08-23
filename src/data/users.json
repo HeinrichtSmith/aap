@@ -1,0 +1,83 @@
+{
+  "users": [
+    {
+      "id": "USR001",
+      "email": "admin@arrowhead.co.nz",
+      "password": "admin123",
+      "name": "Heinricht Smith",
+      "role": "Admin",
+      "level": 1,
+      "xp": 0,
+      "xpToNextLevel": 1000,
+      "avatar": "👨‍💼",
+      "department": "Management",
+      "achievements": [],
+      "stats": {
+        "ordersProcessed": 0,
+        "itemsPicked": 0,
+        "itemsPacked": 0,
+        "accuracy": 100,
+        "averagePickTime": 0
+      }
+    },
+    {
+      "id": "USR002",
+      "email": "picker@arrowhead.co.nz",
+      "password": "picker123",
+      "name": "David",
+      "role": "Picker",
+      "level": 8,
+      "xp": 2150,
+      "xpToNextLevel": 2500,
+      "avatar": "🏃‍♂️",
+      "department": "Warehouse",
+      "achievements": ["ACH001", "ACH002", "ACH006"],
+      "stats": {
+        "ordersProcessed": 876,
+        "itemsPicked": 10234,
+        "itemsPacked": 0,
+        "accuracy": 98.5,
+        "averagePickTime": 52
+      }
+    },
+    {
+      "id": "USR003",
+      "email": "packer@arrowhead.co.nz",
+      "password": "packer123",
+      "name": "Lois",
+      "role": "Packer",
+      "level": 6,
+      "xp": 1450,
+      "xpToNextLevel": 1800,
+      "avatar": "📦",
+      "department": "Warehouse",
+      "achievements": ["ACH001", "ACH007"],
+      "stats": {
+        "ordersProcessed": 654,
+        "itemsPicked": 0,
+        "itemsPacked": 7845,
+        "accuracy": 99.8,
+        "averagePackTime": 120
+      }
+    },
+    {
+      "id": "USR004",
+      "email": "receiver@arrowhead.co.nz",
+      "password": "receiver123",
+      "name": "Ollie",
+      "role": "Receiver",
+      "level": 5,
+      "xp": 1100,
+      "xpToNextLevel": 1500,
+      "avatar": "📥",
+      "department": "Warehouse",
+      "achievements": ["ACH001", "ACH008"],
+      "stats": {
+        "purchaseOrdersReceived": 234,
+        "itemsReceived": 5678,
+        "accuracy": 99.5,
+        "averageReceiveTime": 180
+      }
+    }
+  ]
+}

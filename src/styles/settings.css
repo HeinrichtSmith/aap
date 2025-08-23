@@ -1,0 +1,60 @@
+/* High Contrast Mode */
+.high-contrast {
+  --high-contrast-filter: contrast(1.5) saturate(1.2);
+}
+
+.high-contrast * {
+  filter: var(--high-contrast-filter);
+}
+
+.high-contrast .text-gray-400 {
+  color: #e5e7eb !important;
+}
+
+.high-contrast .text-gray-500 {
+  color: #d1d5db !important;
+}
+
+.high-contrast .text-gray-600 {
+  color: #9ca3af !important;
+}
+
+.high-contrast .bg-gray-800 {
+  background-color: #1f2937 !important;
+}
+
+.high-contrast .bg-gray-900 {
+  background-color: #111827 !important;
+}
+
+.high-contrast .border-gray-700 {
+  border-color: #4b5563 !important;
+}
+
+.high-contrast .border-gray-800 {
+  border-color: #374151 !important;
+}
+
+/* Reduce Motion */
+.reduce-motion,
+.reduce-motion * {
+  animation: none !important;
+  transition: none !important;
+}
+
+.reduce-motion .animate-spin {
+  animation: none !important;
+}
+
+.reduce-motion .animate-pulse {
+  animation: none !important;
+}
+
+.reduce-motion .animate-bounce {
+  animation: none !important;
+}
+
+/* Dark Mode (already implemented by default, but we can add overrides here if needed) */
+.dark {
+  /* Dark mode specific overrides */
+}
