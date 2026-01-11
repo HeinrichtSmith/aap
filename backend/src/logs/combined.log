@@ -590,3 +590,4 @@
 {"level":"info","message":"Cron jobs setup complete (skipped - job files not created yet)","service":"opsui-backend","timestamp":"2026-01-12 10:16:32"}
 {"level":"info","message":"Setting up cron jobs...","service":"opsui-backend","timestamp":"2026-01-12 10:19:59"}
 {"level":"info","message":"Cron jobs setup complete (skipped - job files not created yet)","service":"opsui-backend","timestamp":"2026-01-12 10:19:59"}
+{"level":"info","message":"User logged in: admin@arrowhead.co.nz","service":"opsui-backend","timestamp":"2026-01-12 10:22:28"}
