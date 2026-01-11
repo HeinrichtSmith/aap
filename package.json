@@ -5,8 +5,8 @@
   "description": "WMS Test Project - frontend for Warehouse-WMS-main",
   "scripts": {
     "dev": "cd Warehouse-WMS-main && npm run dev:all",
-    "start": "cd Warehouse-WMS-main && cmd /c START_BACKEND_AND_FRONTEND.bat",
-    "stop": "cd Warehouse-WMS-main && cmd /c STOP_ALL_SERVERS.bat",
+    "start": "cmd /c \"cd /d %~dp0 && START_BACKEND_AND_FRONTEND.bat\"",
+    "stop": "taskkill //F //IM node.exe",
     "backup": "CREATE_BACKUP.bat"
   }
 }
