@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Connection Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+        h1 {
+            color: #3b82f6;
+        }
+        .section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #333;
+            color: #fff;
+            border: 1px solid #555;
+            border-radius: 4px;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+        .log {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        .info { color: #3b82f6; }
+        .warning { color: #f59e0b; }
+    </style>
+</head>
+<body>
+    <h1>🔌 Terminal Connection Tester</h1>
+    
+    <div class="section">
+        <h2>1. Common Terminal Configurations</h2>
+        <p>Select your terminal system type:</p>
+        <select id="presets" onchange="loadPreset()">
+            <option value="">-- Select Terminal Type --</option>
+            <option value="node-ws">Node.js WebSocket Server</option>
+            <option value="socket-io">Socket.IO Server</option>
+            <option value="python-ws">Python WebSocket Server</option>
+            <option value="spring-ws">Spring Boot WebSocket</option>
+            <option value="custom">Custom Configuration</option>
+        </select>
+    </div>
+
+    <div class="section">
+        <h2>2. Connection Settings</h2>
+        <label>WebSocket URL:</label>
+        <input type="text" id="wsUrl" placeholder="ws://localhost:8080/ws" value="ws://localhost:8080/ws">
+        
+        <label>HTTP API URL (optional fallback):</label>
+        <input type="text" id="apiUrl" placeholder="http://localhost:8080/api" value="http://localhost:8080/api">
+        
+        <label>Authentication Token (optional):</label>
+        <input type="text" id="authToken" placeholder="Leave empty if not required">
+    </div>
+
+    <div class="section">
+        <h2>3. Test Connection</h2>
+        <button onclick="testWebSocket()">Test WebSocket</button>
+        <button onclick="testAPI()">Test HTTP API</button>
+        <button onclick="findPorts()">Scan Common Ports</button>
+        <button onclick="clearLog()">Clear Log</button>
+        
+        <div class="log" id="log"></div>
+    </div>
+
+    <div class="section">
+        <h2>4. Results</h2>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        let ws = null;
+        
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = type;
+            entry.textContent = `[${timestamp}] ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+            log('Log cleared', 'info');
+        }
+
+        function loadPreset() {
+            const preset = document.getElementById('presets').value;
+            const wsUrl = document.getElementById('wsUrl');
+            const apiUrl = document.getElementById('apiUrl');
+            
+            const presets = {
+                'node-ws': {
+                    ws: 'ws://localhost:8080/ws',
+                    api: 'http://localhost:8080/api'
+                },
+                'socket-io': {
+                    ws: 'ws://localhost:3000/socket.io/?EIO=4&transport=websocket',
+                    api: 'http://localhost:3000/api'
+                },
+                'python-ws': {
+                    ws: 'ws://localhost:8765',
+                    api: 'http://localhost:8765/api'
+                },
+                'spring-ws': {
+                    ws: 'ws://localhost:8080/ws/terminal',
+                    api: 'http://localhost:8080/api/terminal'
+                }
+            };
+            
+            if (presets[preset]) {
+                wsUrl.value = presets[preset].ws;
+                apiUrl.value = presets[preset].api;
+                log(`Loaded ${preset} configuration`, 'info');
+            }
+        }
+
+        function testWebSocket() {
+            const url = document.getElementById('wsUrl').value;
+            const token = document.getElementById('authToken').value;
+            
+            if (ws) {
+                ws.close();
+            }
+            
+            log(`Attempting to connect to: ${url}`, 'info');
+            
+            try {
+                ws = new WebSocket(url);
+                
+                ws.onopen = () => {
+                    log('✅ WebSocket connected successfully!', 'success');
+                    
+                    // Send test message
+                    const testMsg = {
+                        type: 'test',
+                        message: 'Hello from connection tester',
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    if (token) {
+                        testMsg.auth = token;
+                    }
+                    
+                    ws.send(JSON.stringify(testMsg));
+                    log('Sent test message', 'info');
+                    
+                    updateResults('WebSocket', true, url);
+                };
+                
+                ws.onmessage = (event) => {
+                    log(`Received: ${event.data}`, 'success');
+                };
+                
+                ws.onerror = (error) => {
+                    log(`❌ WebSocket error: ${error.type}`, 'error');
+                    updateResults('WebSocket', false, url);
+                };
+                
+                ws.onclose = () => {
+                    log('WebSocket connection closed', 'warning');
+                };
+                
+            } catch (error) {
+                log(`❌ Failed to create WebSocket: ${error.message}`, 'error');
+                updateResults('WebSocket', false, url);
+            }
+        }
+
+        async function testAPI() {
+            const url = document.getElementById('apiUrl').value;
+            const token = document.getElementById('authToken').value;
+            
+            log(`Testing API endpoint: ${url}`, 'info');
+            
+            try {
+                const headers = {
+                    'Content-Type': 'application/json'
+                };
+                
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: headers
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`✅ API responded with: ${JSON.stringify(data)}`, 'success');
+                    updateResults('HTTP API', true, url);
+                } else {
+                    log(`❌ API returned status: ${response.status}`, 'error');
+                    updateResults('HTTP API', false, url);
+                }
+            } catch (error) {
+                log(`❌ API request failed: ${error.message}`, 'error');
+                updateResults('HTTP API', false, url);
+            }
+        }
+
+        async function findPorts() {
+            log('Scanning common ports...', 'info');
+            const commonPorts = [3000, 3001, 8080, 8081, 8082, 8765, 9000, 5000, 5001, 4000];
+            const protocols = ['ws', 'wss'];
+            const paths = ['', '/ws', '/websocket', '/socket', '/terminal', '/api/ws'];
+            
+            for (const protocol of protocols) {
+                for (const port of commonPorts) {
+                    for (const path of paths) {
+                        const url = `${protocol}://localhost:${port}${path}`;
+                        
+                        try {
+                            const testWs = new WebSocket(url);
+                            
+                            await new Promise((resolve) => {
+                                const timeout = setTimeout(() => {
+                                    testWs.close();
+                                    resolve();
+                                }, 1000);
+                                
+                                testWs.onopen = () => {
+                                    log(`✅ Found WebSocket at: ${url}`, 'success');
+                                    clearTimeout(timeout);
+                                    testWs.close();
+                                    resolve();
+                                };
+                                
+                                testWs.onerror = () => {
+                                    clearTimeout(timeout);
+                                    resolve();
+                                };
+                            });
+                        } catch (error) {
+                            // Silent fail, just continue scanning
+                        }
+                    }
+                }
+            }
+            
+            log('Port scan complete', 'info');
+        }
+
+        function updateResults(type, success, url) {
+            const results = document.getElementById('results');
+            const existing = results.querySelector(`[data-type="${type}"]`);
+            
+            const result = existing || document.createElement('div');
+            result.setAttribute('data-type', type);
+            result.innerHTML = `
+                <h3>${type}</h3>
+                <p>Status: ${success ? '✅ Connected' : '❌ Failed'}</p>
+                <p>URL: ${url}</p>
+                ${success ? `
+                    <p>Add to your .env file:</p>
+                    <pre style="background: #333; padding: 10px; border-radius: 4px;">
+${type === 'WebSocket' ? 'REACT_APP_TERMINAL_WS_URL=' + url : 'REACT_APP_TERMINAL_API_URL=' + url}</pre>
+                ` : ''}
+            `;
+            
+            if (!existing) {
+                results.appendChild(result);
+            }
+        }
+
+        // Initialize
+        log('Terminal Connection Tester ready', 'info');
+        log('Select a preset or enter your terminal URLs to begin', 'info');
+    </script>
+</body>
+</html>
