@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, AlertTriangle } from 'lucide-react';
 import OrderSelectionScreen from '../components/picking/OrderSelectionScreen';
-import PickingScreen from '../components/picking/PickingScreen';
+// PickingScreen temporarily disabled - component being recreated
+// import PickingScreen from '../components/picking/PickingScreen';
 import PickingConfirmation from '../components/picking/PickingConfirmation';
 import AnimatedBackground from '../components/AnimatedBackground';
 import { initialOrders } from '../data/pickingData';
@@ -9,9 +10,10 @@ import { playSound } from '../utils/audio';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useWarehouse } from '../hooks/useWarehouseContext';
 import { formatTime } from '../utils/formatters';
+import api from '../services/api';
 
 const Picking = () => {
-  const { availablePickingOrders, setAvailablePickingOrders, pickedOrders, setPickedOrders, updateStats, addXP, user } = useWarehouse();
+  const { availablePickingOrders, setAvailablePickingOrders, pickedOrders, setPickedOrders, updateStats, user } = useWarehouse();
   const [currentScreen, setCurrentScreen] = useState('orderSelection');
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [pickingTime, setPickingTime] = useState(null);
@@ -22,6 +24,7 @@ const Picking = () => {
   const [isPickConfirmed, setIsPickConfirmed] = useState(false);
   const [shouldUndoLastPick, setShouldUndoLastPick] = useState(false);
   const [currentTimerSeconds, setCurrentTimerSeconds] = useState(0);
+  const [statsUpdatedForOrder, setStatsUpdatedForOrder] = useState(false);
 
   // Sync with warehouse context
   useEffect(() => {
@@ -32,7 +35,8 @@ const Picking = () => {
   useEffect(() => {
     if (currentScreen === 'confirmation' && selectedOrder) {
       window.pickingPageData = {
-        orderId: selectedOrder?.orderId || selectedOrder?.id,
+        // FIX: Prioritize human-readable SO number fields over transformed orderId
+        orderId: selectedOrder?.soNumber || selectedOrder?.salesOrderNumber || selectedOrder?.id,
         soNumber: selectedOrder?.salesOrderNumber || selectedOrder?.soNumber,
         customer: selectedOrder?.customer,
         timerDisplay: formatTime(currentTimerSeconds),
@@ -62,7 +66,7 @@ const Picking = () => {
   // Clear picking data when on order selection screen
   useEffect(() => {
     if (currentScreen === 'orderSelection') {
-      // Clear the picking data from window
+      // Clear picking data from window
       if (window.pickingPageData) {
         delete window.pickingPageData;
       }
@@ -74,6 +78,7 @@ const Picking = () => {
     setStartTime(Date.now()); // Start the timer
     setPickedItems([]); // Reset picked items for new order
     setIsPickConfirmed(false); // Reset confirmation flag
+    setStatsUpdatedForOrder(false); // Reset stats update flag for new order
     setCurrentTimerSeconds(0); // Reset timer for new order
     setCurrentScreen('picking');
   };
@@ -227,7 +232,7 @@ const Picking = () => {
               .map(item => `
                 <tr>
                   <td><span class="bin-location">${item.binLocation}</span></td>
-                  <td>${item.id}</td>
+                  <td>${item.sku || 'UNKNOWN'}</td>
                   <td>${item.name}</td>
                   <td style="text-align: center; font-weight: bold;">${item.quantity}</td>
                   <td style="text-align: center;">____</td>
@@ -277,57 +282,71 @@ const Picking = () => {
     };
   };
 
-  const handleConfirmPick = () => {
+  const handleConfirmPick = async () => {
     // Prevent duplicate confirmations
     if (isPickConfirmed) return;
     
-    // Create picked order data for packing station
-    const pickedOrder = {
-      ...selectedOrder,
-      pickedDate: new Date().toISOString(),
-      status: 'picked',
-      pickedItems: pickedItems,
-      pickingTime: pickingTime?.time || 0,
-      pickingStats: pickingStats
-    };
-
-    // Add to picked orders for packing station
-    setPickedOrders(prev => [...prev, pickedOrder]);
-    
-    // Remove from available picking orders
-    const remainingOrders = availablePickingOrders.filter(o => o.id !== selectedOrder.id);
-    setAvailablePickingOrders(remainingOrders);
-    setOrders(remainingOrders);
-    
-    // Update user stats
-    if (user && pickedItems.length > 0) {
-      const itemsPicked = pickedItems.reduce((total, item) => total + (item.quantity || 1), 0);
-      const newStats = {
-        ordersProcessed: (user.stats?.ordersProcessed || 0) + 1,
-        itemsPicked: (user.stats?.itemsPicked || 0) + itemsPicked
-      };
+    try {
+      // Get order ID - handle both 'id' and 'orderId' field names
+      const orderId = selectedOrder.id || selectedOrder.orderId;
       
-      // Update average pick time if we have a time recorded
-      if (pickingTime?.time) {
-        const currentAvg = user.stats?.averagePickTime || 50;
-        const totalOrders = user.stats?.ordersProcessed || 0;
-        const newAvg = Math.round(((currentAvg * totalOrders) + pickingTime.time) / (totalOrders + 1));
-        newStats.averagePickTime = newAvg;
+      if (!orderId) {
+        console.error('No order ID found:', selectedOrder);
+        alert('Error: Unable to identify order. Please try selecting the order again.');
+        return;
       }
       
-      updateStats(newStats);
+      // Update order status to READY_TO_PACK via API
+      await api.orders.updateStatus(orderId, 'READY_TO_PACK');
       
-      // Award XP based on performance
-      const baseXP = 50; // Base XP for completing an order
-      const speedBonus = pickingTime?.time < 180 ? 20 : 0; // Bonus for fast picking
-      const accuracyBonus = pickingStats?.accuracy >= 100 ? 10 : 0; // Bonus for perfect accuracy
-      const totalXP = baseXP + speedBonus + accuracyBonus;
+      // Reload orders from backend - this is the single source of truth
+      // The getAvailable() API already filters by status=PENDING,PICKING
+      // so orders with status=READY_TO_PACK won't be included
+      const freshOrders = await api.orders.getAvailable();
+      setAvailablePickingOrders(freshOrders);
+      setOrders(freshOrders);
       
-      addXP(totalXP, `Picked order ${selectedOrder.orderId}`);
+      // Create picked order data for packing station
+      const pickedOrder = {
+        ...selectedOrder,
+        pickedDate: new Date().toISOString(),
+        status: 'picked',
+        pickedItems: pickedItems,
+        pickingTime: pickingTime?.time || 0,
+        pickingStats: pickingStats
+      };
+
+      // Add to picked orders for packing station
+      setPickedOrders(prev => [...prev, pickedOrder]);
+      
+      // Update user stats (only once per order)
+      // Note: ordersProcessed is only incremented when order is SHIPPED, not picked
+      if (user && pickedItems.length > 0 && !statsUpdatedForOrder) {
+        const itemsPicked = pickedItems.reduce((total, item) => total + (item.quantity ||1), 0);
+        const newStats = {
+          itemsPicked: (user.stats?.itemsPicked || 0) + itemsPicked
+        };
+        
+        // Update average pick time if we have a time recorded
+        if (pickingTime?.time) {
+          const currentAvg = user.stats?.averagePickTime || 50;
+          const totalOrders = user.stats?.ordersProcessed || 0;
+          const newAvg = Math.round(((currentAvg * totalOrders) + pickingTime.time) / (totalOrders + 1));
+          newStats.averagePickTime = newAvg;
+        }
+        
+        updateStats(newStats);
+        setStatsUpdatedForOrder(true); // Mark stats as updated for this order
+      }
+
+      // Mark as confirmed
+      setIsPickConfirmed(true);
+    } catch (error) {
+      console.error('Error confirming pick:', error);
+      alert('Failed to update order status. Please check your connection and try again.');
+      // Don't fall back to local state - backend must be single source of truth
+      // User can retry the confirmation
     }
-    
-    // Mark as confirmed
-    setIsPickConfirmed(true);
   };
 
   const handleNewOrder = () => {
@@ -346,7 +365,8 @@ const Picking = () => {
       setPickingStats(null);
       setPickedItems([]); // Reset picked items for new order
       setIsPickConfirmed(false); // Reset confirmation flag for new order
-      setStartTime(Date.now()); // Start the timer for the new order
+      setStatsUpdatedForOrder(false); // Reset stats update flag for new order
+      setStartTime(Date.now()); // Start timer for new order
       setCurrentTimerSeconds(0); // Reset timer for new order
       setCurrentScreen('picking'); // Go directly to picking screen
     } else {
@@ -360,7 +380,7 @@ const Picking = () => {
   };
 
   const handleEdit = () => {
-    // Set a flag to undo the last pick when returning to picking screen
+    // Set a flag to undo last pick when returning to picking screen
     setShouldUndoLastPick(true);
     setCurrentScreen('picking');
   };
@@ -369,7 +389,6 @@ const Picking = () => {
     // Return to order selection screen
     setCurrentScreen('orderSelection');
   };
-
 
   return (
     <>
@@ -392,15 +411,31 @@ const Picking = () => {
       )}
       
       {currentScreen === 'picking' && selectedOrder && (
-        <PickingScreen 
-          order={selectedOrder} 
-          onComplete={handlePickingComplete} 
-          initialPickedItems={pickedItems}
-          onBack={() => setCurrentScreen('orderSelection')}
-          shouldUndoLastPick={shouldUndoLastPick}
-          onUndoLastPickComplete={() => setShouldUndoLastPick(false)}
-          initialTimerSeconds={currentTimerSeconds}
-        />
+        <div className="min-h-screen w-full p-8 flex items-center justify-center relative">
+          <AnimatedBackground />
+          <div className="text-center relative z-10 bg-white/[0.03] backdrop-blur-xl rounded-2xl p-12 border border-white/10 max-w-2xl">
+            <div className="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full mb-6 shadow-lg">
+              <AlertTriangle className="text-white" size={64} />
+            </div>
+            <h2 className="text-4xl font-bold text-white mb-4">Picking Screen Unavailable</h2>
+            <p className="text-xl text-gray-400 mb-6">The picking interface is currently being rebuilt.</p>
+            <p className="text-lg text-gray-500 mb-8">Please use the printed picking list or try again later.</p>
+            <button
+              onClick={() => setCurrentScreen('orderSelection')}
+              className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-semibold hover:from-blue-600 hover:to-purple-600 transition-all duration-300 shadow-lg shadow-blue-500/50"
+            >
+              Back to Order Selection
+            </button>
+            <div className="mt-8 pt-8 border-t border-white/10">
+              <button
+                onClick={handlePrintPickingList}
+                className="px-6 py-3 bg-white/10 text-white rounded-xl font-semibold hover:bg-white/20 transition-all duration-300"
+              >
+                Print Picking List
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Confirmation Modal Overlay */}

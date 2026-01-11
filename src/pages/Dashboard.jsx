@@ -29,11 +29,8 @@ import { useBatchedUpdates } from '../hooks/useBatchedUpdates';
 const OptimizedAreaChart = lazy(() => import('../components/dashboard/OptimizedAreaChart'));
 const OptimizedPerformanceChart = lazy(() => import('../components/dashboard/OptimizedPerformanceChart'));
 
-// Import data files
-import ordersData from '../data/orders.json';
-import binsData from '../data/bins.json';
-import purchaseOrdersData from '../data/purchaseOrders.json';
-import { initialTotes } from '../data/packingData';
+// Import API service
+import api from '../services/api';
 
 // Enhanced Stats Card with GameIcon integration and modern animations - Memoized
 const ModernStatsCard = memo(({ 
@@ -47,12 +44,12 @@ const ModernStatsCard = memo(({
   color = "primary"
 }) => {
   const colorClasses = useMemo(() => ({
-    primary: "from-blue-500 to-blue-600",
-    warning: "from-purple-500 to-purple-600", 
-    success: "from-green-500 to-emerald-500",
-    danger: "from-red-500 to-red-600",
-    purple: "from-purple-500 to-purple-600",
-    pink: "from-pink-500 to-pink-600"
+    primary: "from-[#3A86B6] to-[#2A7696]",
+    warning: "from-amber-600 to-amber-700",
+    success: "from-emerald-600 to-emerald-700",
+    danger: "from-red-600 to-red-700",
+    purple: "from-purple-600 to-purple-700",
+    pink: "from-pink-600 to-pink-700"
   }), []);
 
   const handleClick = useCallback(() => {
@@ -74,12 +71,12 @@ const ModernStatsCard = memo(({
     <motion.div
       onClick={handleClick}
       onMouseEnter={handleHover}
-      className="bg-white/[0.03] backdrop-blur-xl border border-white/10 p-8 rounded-3xl cursor-pointer relative overflow-hidden group transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/10"
+      className="bg-[#151A20] backdrop-blur-xl border border-[#1F2630] p-8 rounded-xl cursor-pointer relative overflow-hidden group transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-[#3A86B6]/10"
       whileHover={{ y: -8, transition: { type: "spring", stiffness: 400, damping: 25 } }}
       whileTap={{ scale: 0.98 }}
     >
       {/* Gradient overlay */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${colorClasses[color]} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
+      <div className={`absolute inset-0 bg-gradient-to-br ${colorClasses[color]} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
       
       <div className="relative z-10">
         <div className="flex items-center justify-center mb-6">
@@ -101,23 +98,23 @@ const ModernStatsCard = memo(({
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
         >
-          <h3 className="text-5xl font-bold mb-3 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+          <h3 className="text-5xl font-bold mb-3 bg-gradient-to-r from-[#E6EAF0] to-[#A0A7B4] bg-clip-text text-transparent">
             <AnimatedCounter target={value} duration={1500} />
           </h3>
-          <button 
+          <button
             onClick={handleClick}
-            className="text-gray-400 text-lg font-medium hover:text-blue-400 transition-colors duration-200 cursor-pointer"
+            className="text-[#A0A7B4] text-lg font-medium hover:text-[#4A96C6] transition-colors duration-200 cursor-pointer"
           >
             {title}
           </button>
         </motion.div>
-        
+
         {/* Interactive indicator */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="mt-6 flex items-center text-blue-400 opacity-0 group-hover:opacity-100 transition-all duration-300"
+          className="mt-6 flex items-center text-[#3A86B6] opacity-0 group-hover:opacity-100 transition-all duration-300"
         >
           <ChevronRight size={16} className="mr-2" />
           <span className="text-sm font-medium">{actionText}</span>
@@ -129,22 +126,28 @@ const ModernStatsCard = memo(({
 
 ModernStatsCard.displayName = 'ModernStatsCard';
 
-// Tier calculation functions - Memoized
-const getUserTier = (level) => {
-  if (level >= 50) return 'cosmic';
-  if (level >= 25) return 'mega';
-  if (level >= 15) return 'super';
-  if (level >= 8) return 'standard';
-  return 'normal';
-};
-
-const getStatsTier = (value, trend = 0) => {
-  const performanceScore = value + (trend * 2);
-  if (performanceScore >= 40) return 'cosmic';
-  if (performanceScore >= 25) return 'mega';
-  if (performanceScore >= 15) return 'super';
-  if (performanceScore >= 10) return 'standard';
-  return 'normal';
+// Professional color scheme matching marketing site
+const colorScheme = {
+  background: {
+    primary: '#0B0D10',
+    secondary: '#111418',
+    tertiary: '#151A20',
+  },
+  surface: {
+    base: '#151A20',
+    elevated: '#1A1F28',
+    border: '#1F2630',
+  },
+  text: {
+    primary: '#E6EAF0',
+    secondary: '#A0A7B4',
+    muted: '#6B7280',
+  },
+  accent: {
+    default: '#3A86B6',
+    hover: '#4A96C6',
+    active: '#2A7696',
+  },
 };
 
 // Main Dashboard Component
@@ -153,39 +156,43 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [selectedMetric, setSelectedMetric] = useState('total'); // 'total', 'picked', 'packed'
 
+  // State for dashboard data
+  const [dashboardStats, setDashboardStats] = useState({
+    totalOrders: 0,
+    pendingOrders: 0,
+    pickingOrders: 0,
+    packedOrders: 0,
+    shippedOrders: 0,
+    totalProducts: 0,
+    totalInventory: 0
+  });
+
+  // Load dashboard stats from API
+  useEffect(() => {
+    const loadDashboardStats = async () => {
+      try {
+        const stats = await api.dashboard.getStats();
+        setDashboardStats(stats);
+      } catch (error) {
+        console.error('Failed to load dashboard stats:', error);
+      }
+    };
+    
+    loadDashboardStats();
+  }, []);
+
   // Calculate real operational data
   const calculateStats = useCallback(() => {
-    const orders = ordersData.orders;
-    const bins = binsData.bins;
-    const purchaseOrders = purchaseOrdersData.purchaseOrders;
-
-    // Picking Station: Orders that need picking
-    // Use context if it has been initialized (even if empty), otherwise use static data
-    const contextInitialized = availablePickingOrders.length > 0 || pickedOrders.length > 0 || packedOrders.length > 0;
-    const ordersToBePicked = contextInitialized
-      ? availablePickingOrders 
-      : orders.filter(order => order.status === 'pending' || order.status === 'picking');
-
-    // Packing Station: Orders that need packing (from context)
+    // Use context orders for picking/packing/shipping stations
+    const ordersToBePicked = availablePickingOrders || [];
     const ordersToBePacked = pickedOrders || [];
-
-    // Shipping Station: Orders that have been packed (from context)
     const ordersShipped = packedOrders || [];
 
-    // Inwards Station: Purchase orders awaiting receipt
-    const purchaseOrdersToReceive = purchaseOrders.filter(po => 
-      po.status === 'pending' || po.status === 'receiving'
-    );
-
-    // Stock Control: Number of bins with stock
-    const binsWithStock = bins.filter(bin => bin.currentStock.length > 0).length;
-
-    // Calculate total items picked (from picked orders in context)
+    // Use API stats for other metrics
     const totalItemsPicked = ordersToBePacked.reduce((total, order) => {
       return total + (order.items ? order.items.length : 0);
     }, 0);
 
-    // Calculate total items packed (from packed orders in context)
     const totalItemsPacked = ordersShipped.reduce((total, order) => {
       return total + (order.items ? order.items.length : 0);
     }, 0);
@@ -195,21 +202,21 @@ const Dashboard = () => {
       todayOrders: ordersToBePicked.length,
       pendingOrders: ordersToBePacked.length, 
       activePickingTasks: ordersShipped.length,
-      packingQueue: purchaseOrdersToReceive.length,
-      teamPerformance: bins.length,
+      packingQueue: dashboardStats.totalInventory || 0, // Using inventory count
+      teamPerformance: dashboardStats.totalProducts || 0, // Using products count
       
       // GameIcon quantities (matching display values for consistency)
       pickingQuantity: ordersToBePicked.length,
       packingQuantity: ordersToBePacked.length,
       shippingQuantity: ordersShipped.length,
-      inwardsQuantity: purchaseOrdersToReceive.length,
-      stockControlQuantity: binsWithStock,
+      inwardsQuantity: dashboardStats.totalInventory || 0,
+      stockControlQuantity: dashboardStats.totalProducts || 0,
       
       // Dispatch Performance metrics
       totalItemsPicked: totalItemsPicked,
       totalItemsPacked: totalItemsPacked
     };
-  }, [availablePickingOrders, pickedOrders, packedOrders]);
+  }, [availablePickingOrders, pickedOrders, packedOrders, dashboardStats]);
 
   // Memoized stats calculation
   const stats = useMemo(() => {
@@ -283,24 +290,20 @@ const Dashboard = () => {
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/[0.03] backdrop-blur-xl border border-white/10 p-8 rounded-3xl"
+            className="bg-[#151A20] backdrop-blur-xl border border-[#1F2630] p-8 rounded-xl"
           >
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <div className="flex items-center space-x-4 mb-4">
                   <motion.div
-                    whileHover={{ scale: 1.1, rotateY: 15 }}
-                    transition={{ type: "spring", stiffness: 600, damping: 20 }}
+                    className="w-16 h-16 rounded-xl bg-gradient-to-br from-[#3A86B6] to-[#2A7696] flex items-center justify-center shadow-lg"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
                   >
-                    <GameIcon
-                      iconType="trophy"
-                      actualQuantity={user?.level || 5}
-                      size={64}
-                      iconSize="large"
-                    />
+                    <Package size={32} className="text-white" />
                   </motion.div>
-                  <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent">
-                    Welcome back, 
+                  <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-[#E6EAF0] to-[#A0A7B4] bg-clip-text text-transparent">
+                    Welcome back,
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
@@ -321,48 +324,15 @@ const Dashboard = () => {
                           console.log('Audio error:', error);
                         }
                       }, [])}
-                      className="ml-2 hover:text-blue-300 transition-colors cursor-pointer underline decoration-2 decoration-blue-500/50 hover:decoration-blue-500 underline-offset-4"
+                      className="ml-2 hover:text-[#4A96C6] transition-colors cursor-pointer underline decoration-2 decoration-[#3A86B6]/50 hover:decoration-[#3A86B6] underline-offset-4"
                     >
                       {user?.name}!
                     </motion.button>
                   </h1>
                 </div>
-                <p className="text-gray-400 text-xl">
-                  Ready to make today productive? You're <span className="text-blue-400 font-bold">{100 - ((user?.xp / user?.xpToNextLevel) * 100).toFixed(0)}%</span> away from Level {user?.level + 1}!
+                <p className="text-[#A0A7B4] text-xl">
+                  Ready to optimize your warehouse operations today?
                 </p>
-                
-                {/* XP Progress Bar */}
-                <div className="mt-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-400">Level {user?.level} Progress</span>
-                    <span className="text-sm text-blue-400 font-bold">{user?.xp} / {user?.xpToNextLevel} XP</span>
-                  </div>
-                  <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
-                    <motion.div 
-                      className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 relative shadow-md"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${((user?.xp / user?.xpToNextLevel) * 100)}%` }}
-                      transition={{ duration: 1.5, ease: "easeOut" }}
-                      style={{
-                        filter: 'drop-shadow(0 0 8px rgba(59, 130, 246, 0.6))'
-                      }}
-                    >
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                        animate={{ x: ['-100%', '200%'] }}
-                        transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
-                      />
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400 opacity-50"
-                        animate={{ 
-                          opacity: [0.5, 0.8, 0.5],
-                          scale: [1, 1.01, 1]
-                        }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                      />
-                    </motion.div>
-                  </div>
-                </div>
                 
                 {/* Presentation Mode Button */}
                 <motion.button
@@ -375,7 +345,7 @@ const Dashboard = () => {
                   onMouseEnter={useCallback(() => playSound('hover'), [])}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="mt-4 flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg font-medium hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300"
+                  className="mt-4 flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-[#3A86B6] to-[#2A7696] text-white rounded-lg font-medium hover:shadow-lg hover:shadow-[#3A86B6]/25 transition-all duration-300"
                 >
                   <Play size={20} />
                   <span>Start Presentation</span>
@@ -469,8 +439,8 @@ const Dashboard = () => {
           {/* Charts Overview */}
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
             <Suspense fallback={
-              <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 p-8 rounded-3xl h-96 flex items-center justify-center">
-                <div className="text-white text-lg">Loading chart...</div>
+              <div className="bg-[#151A20] backdrop-blur-xl border border-[#1F2630] p-8 rounded-xl h-96 flex items-center justify-center">
+                <div className="text-[#E6EAF0] text-lg">Loading chart...</div>
               </div>
             }>
               <OptimizedAreaChart
@@ -482,14 +452,14 @@ const Dashboard = () => {
                   { time: '4PM', orders: 6 }
                 ]}
                 title="Orders Today"
-                color="#3b82f6"
+                color="#3A86B6"
                 gradientId="orderGradient"
               />
             </Suspense>
 
             <Suspense fallback={
-              <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 p-8 rounded-3xl h-96 flex items-center justify-center">
-                <div className="text-white text-lg">Loading chart...</div>
+              <div className="bg-[#151A20] backdrop-blur-xl border border-[#1F2630] p-8 rounded-xl h-96 flex items-center justify-center">
+                <div className="text-[#E6EAF0] text-lg">Loading chart...</div>
               </div>
             }>
               <OptimizedPerformanceChart

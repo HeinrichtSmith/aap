@@ -94,9 +94,8 @@ const ConfirmationScreen = ({ order, packingTime, selectedPackage, onPrintLabel,
         setTimeout(() => addXP(quantityBonus, 'Multi-Package Bonus'), 2500);
       }
 
-      // Update stats
+      // Update stats - Note: ordersProcessed is only incremented when order is SHIPPED, not packed
       updateStats({
-        ordersProcessed: (order.stats?.ordersProcessed || 0) + 1,
         packingTime: packingTime.time,
         packagesProcessed: selectedPackage.quantity || 1
       });

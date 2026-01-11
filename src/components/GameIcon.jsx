@@ -55,7 +55,7 @@ const GameIcon = ({ iconType, iconCount = 1, size = 80, iconSize = 'medium', act
   return (
     <div className="relative inline-block">
       <motion.div 
-        className={`relative w-24 h-24 flex items-center justify-center ${
+        className={`relative w-24 h-24 flex items-center justify-center overflow-hidden ${
           cosmicTier ? 'filter drop-shadow-2xl animate-pulse' : megaTier ? 'filter drop-shadow-2xl' : ''
         }`}
         whileHover={{ scale: 1.1 }}
@@ -64,9 +64,12 @@ const GameIcon = ({ iconType, iconCount = 1, size = 80, iconSize = 'medium', act
         {/* Render stacked icons */}
         {stackConfig.map((config, index) => {
           // Use mixed icon components if available, cycling through them
-          const CurrentIconComponent = shouldUseMixedIcons ? 
+          const CurrentIconComponent = shouldUseMixedIcons ?
             mixedComponents[index % mixedComponents.length] : IconComponent;
-            
+
+          // Use individual tier type from stack config, or fall back to effectiveTier
+          const iconTierType = config.tierType || effectiveTier;
+
           return (
             <motion.div
               key={index}
@@ -79,28 +82,28 @@ const GameIcon = ({ iconType, iconCount = 1, size = 80, iconSize = 'medium', act
                 zIndex: config.zIndex
               }}
               initial={{ scale: 0, opacity: 0 }}
-              animate={{ 
-                scale: config.scale, 
+              animate={{
+                scale: config.scale,
                 opacity: 1,
                 rotate: config.rotation
               }}
-              transition={{ 
-                delay: index * 0.1, 
-                type: "spring", 
-                stiffness: 260, 
-                damping: 20 
+              transition={{
+                delay: index * 0.1,
+                type: "spring",
+                stiffness: 260,
+                damping: 20
               }}
-              whileHover={{ 
+              whileHover={{
                 y: config.y - 5,
                 rotate: config.rotation + (Math.random() * 10 - 5),
                 transition: { type: "spring", stiffness: 400 }
               }}
             >
-              <CurrentIconComponent 
+              <CurrentIconComponent
                 adjustedSize={adjustedSize}
-                isTierBox={true} // Always tier box for stacked items
-                tierType={effectiveTier} // Always use effectiveTier
-                tier={effectiveTier}
+                isTierBox={config.isTier} // Use isTier from stack config
+                tierType={iconTierType} // Use individual tier type for each icon
+                tier={iconTierType}
                 size={adjustedSize}
                 quantity={quantity}
               />

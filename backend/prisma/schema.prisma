@@ -1,0 +1,783 @@
+// This is your Prisma schema file,
+// learn more about it in docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// CORE ENTITIES
+// ============================================
+
+model Company {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  plan        PlanType @default(STARTER)
+  status      CompanyStatus @default(ACTIVE)
+  users       User[]
+  sites       Site[]
+  products    Product[]
+  bins        Bin[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("companies")
+}
+
+enum PlanType {
+  STARTER
+  PRO
+  ELITE
+}
+
+enum CompanyStatus {
+  ACTIVE
+  SUSPENDED
+  CANCELLED
+}
+
+model Site {
+  id          String   @id @default(uuid())
+  companyId   String
+  company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  code        String   @unique
+  name        String
+  address     Json?
+  isActive    Boolean  @default(true)
+  users       User[]
+  inventory   InventoryItem[]
+  orders      Order[]
+  fromTransfers InventoryTransfer[] @relation("TransferFromSite")
+  toTransfers   InventoryTransfer[] @relation("TransferToSite")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("sites")
+}
+
+model User {
+  id             String         @id @default(uuid())
+  email          String         @unique
+  password       String
+  name           String
+  role           UserRole
+  level          Int            @default(1)
+  xp             Int            @default(0)
+  xpToNextLevel  Int            @default(1000)
+  avatar         String?
+  department     String
+  companyId      String
+  company        Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  siteId         String?
+  site           Site?          @relation(fields: [siteId], references: [id], onDelete: SetNull)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  // Relations
+  assignedOrders Order[]        @relation("PickerOrders")
+  packedOrders   Order[]        @relation("PackerOrders")
+  activities     Activity[]
+  achievements   UserAchievement[]
+  purchaseOrders PurchaseOrder[] @relation("ReceivedOrders")
+  stats          UserStats?
+
+  @@index([companyId])
+  @@index([siteId])
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  PICKER
+  PACKER
+  RECEIVER
+  STAFF
+}
+
+model UserStats {
+  id                String   @id @default(uuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ordersProcessed   Int      @default(0)
+  itemsPicked       Int      @default(0)
+  itemsPacked       Int      @default(0)
+  purchaseOrdersReceived Int @default(0)
+  itemsReceived     Int      @default(0)
+  accuracy          Float    @default(100)
+  averagePickTime   Int      @default(0)
+  averagePackTime   Int      @default(0)
+  averageReceiveTime Int     @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("user_stats")
+}
+
+model Achievement {
+  id          String   @id @default(uuid())
+  code        String   @unique
+  name        String
+  description String
+  icon        String
+  xpReward    Int
+  category    String
+  createdAt   DateTime @default(now())
+
+  userAchievements UserAchievement[]
+
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id             String       @id @default(uuid())
+  userId         String
+  achievementId  String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement    Achievement  @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  earnedAt       DateTime     @default(now())
+
+  @@unique([userId, achievementId])
+  @@map("user_achievements")
+}
+
+// ============================================
+// PRODUCT & INVENTORY
+// ============================================
+
+model Product {
+  id             String        @id @default(uuid())
+  companyId      String
+  siteId         String?
+  company        Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  sku            String        @unique
+  name           String
+  description    String?
+  category       String
+  price          Float
+  weight         Float
+  dimensions     Json
+  image          String?
+  barcode        String        @unique
+  reorderPoint   Int
+  reorderQuantity Int
+  supplier       String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  // Relations
+  inventoryItems InventoryItem[]
+  orderItems     OrderItem[]
+  binProducts    BinProduct[]
+  transfers      InventoryTransfer[]
+
+  @@index([companyId])
+  @@index([siteId])
+  @@index([sku])
+  @@index([barcode])
+  @@map("products")
+}
+
+model Bin {
+  id          String    @id @default(uuid())
+  companyId   String
+  company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  code        String    @unique
+  aisle       String
+  row         String
+  column      String
+  level       String?
+  capacity    Int?
+  type        String?    // small, medium, large, overflow
+  isAvailable Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  inventoryItems InventoryItem[]
+  products      BinProduct[]
+
+  @@index([companyId])
+  @@index([code])
+  @@map("bins")
+}
+
+model InventoryItem {
+  id               String         @id @default(uuid())
+  sku               String
+  productId         String
+  binId            String
+  binLocation       String
+  siteId           String?
+  quantityTotal     Int            @default(0)
+  quantityAvailable Int            @default(0)
+  quantityReserved  Int            @default(0)
+  status           String         @default("AVAILABLE")
+  flaggedForAudit  Boolean        @default(false)
+  auditReason      String?
+  lastCountedAt    DateTime?
+  product          Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  bin              Bin            @relation(fields: [binId], references: [id], onDelete: Cascade)
+  site             Site?          @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@unique([productId, binId])
+  @@index([binId])
+  @@index([sku])
+  @@index([productId])
+  @@index([siteId])
+  @@index([status])
+  @@map("inventory_items")
+}
+
+model BinProduct {
+  id        String   @id @default(uuid())
+  binId     String
+  productId String
+  bin       Bin      @relation(fields: [binId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([binId, productId])
+  @@map("bin_products")
+}
+
+// ============================================
+// ORDERS
+// ============================================
+
+model Order {
+  id              String      @id
+  customerName    String
+  customerEmail   String
+  customerPhone   String
+  status          OrderStatus
+  priority        OrderPriority @default(NORMAL)
+  createdAt       DateTime    @default(now())
+  requiredBy      DateTime?
+  assignedPickerId String?
+  assignedPackerId String?
+  siteId          String
+  site            Site        @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  shippingAddress Json
+  packageType     String?
+  trackingNumber  String?    @unique
+  packedAt        DateTime?
+  shippedAt       DateTime?
+  notes           String?
+
+  // Relations
+  assignedPicker User?      @relation("PickerOrders", fields: [assignedPickerId], references: [id])
+  assignedPacker User?      @relation("PackerOrders", fields: [assignedPackerId], references: [id])
+  items          OrderItem[]
+
+  @@index([status])
+  @@index([priority])
+  @@index([assignedPickerId])
+  @@index([siteId])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+enum OrderStatus {
+  PENDING
+  PICKING
+  READY_TO_PACK
+  PACKED
+  SHIPPED
+  CANCELLED
+}
+
+enum OrderPriority {
+  LOW
+  NORMAL
+  OVERNIGHT
+  URGENT
+}
+
+model OrderItem {
+  id             String  @id @default(uuid())
+  orderId        String
+  productId      String?
+  sku            String
+  name           String?
+  barcode        String?
+  quantity       Int
+  pickedQuantity Int     @default(0)
+  packedQuantity Int     @default(0)
+  location       String
+  order          Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product        Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@map("order_items")
+}
+
+// ============================================
+// PURCHASE ORDERS (INWARDS)
+// ============================================
+
+model PurchaseOrder {
+  id             String              @id
+  supplierName   String
+  supplierEmail  String?
+  supplierPhone  String?
+  status         PurchaseOrderStatus @default(PENDING)
+  createdAt      DateTime            @default(now())
+  receivedAt     DateTime?
+  assignedReceiverId String?
+  notes          String?
+
+  // Relations
+  items    PurchaseOrderItem[]
+  receiver User?                @relation("ReceivedOrders", fields: [assignedReceiverId], references: [id])
+
+  @@index([status])
+  @@index([assignedReceiverId])
+  @@map("purchase_orders")
+}
+
+enum PurchaseOrderStatus {
+  PENDING
+  RECEIVING
+  RECEIVED
+  CANCELLED
+}
+
+model PurchaseOrderItem {
+  id               String        @id @default(uuid())
+  purchaseOrderId  String
+  productId        String
+  sku              String
+  name             String?
+  quantityOrdered  Int
+  quantityReceived Int           @default(0)
+  purchaseOrder    PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+
+  @@index([purchaseOrderId])
+  @@map("purchase_order_items")
+}
+
+// ============================================
+// RETURNS
+// ============================================
+
+model Return {
+  id           String      @id
+  orderId      String?
+  customerName String
+  customerEmail String
+  customerPhone String
+  status       ReturnStatus @default(PENDING)
+  reason       String
+  createdAt    DateTime    @default(now())
+  processedAt  DateTime?
+  notes        String?
+
+  @@index([status])
+  @@map("returns")
+}
+
+enum ReturnStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PROCESSED
+}
+
+// ============================================
+// STOCK TAKES
+// ============================================
+
+model StockTake {
+  id          String        @id
+  name        String
+  status      StockTakeStatus @default(PENDING)
+  scheduledFor DateTime?
+  startedAt   DateTime?
+  completedAt DateTime?
+  createdBy   String
+  approvedBy  String?
+  approvedAt  DateTime?
+  companyId   String
+  siteId      String
+  notes       String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  items      StockTakeItem[]
+
+  @@index([status])
+  @@index([companyId])
+  @@index([siteId])
+  @@map("stock_takes")
+}
+
+enum StockTakeStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model StockTakeItem {
+  id           String    @id @default(uuid())
+  stockTakeId  String
+  productId    String
+  sku          String
+  binCode      String
+  expectedQty  Int
+  actualQty    Int?
+  notes        String?
+  stockTake    StockTake @relation(fields: [stockTakeId], references: [id], onDelete: Cascade)
+
+  @@index([stockTakeId])
+  @@index([productId])
+  @@map("stock_take_items")
+}
+
+// ============================================
+// ACTIVITY LOGGING
+// ============================================
+
+model Activity {
+  id          String       @id @default(uuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type        ActivityType
+  entityType  String
+  entityId    String
+  description String
+  metadata    Json?
+  createdAt   DateTime     @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("activities")
+}
+
+enum ActivityType {
+  LOGIN
+  LOGOUT
+  ORDER_PICKED
+  ORDER_PACKED
+  ORDER_SHIPPED
+  PRODUCT_RECEIVED
+  INVENTORY_ADJUSTED
+  STOCK_TAKE_COMPLETED
+  ACHIEVEMENT_EARNED
+  USER_CREATED
+  USER_UPDATED
+}
+
+// ============================================
+// TRANSACTION LOCK PROTOCOL
+// ============================================
+
+model StockLock {
+  id              String   @id @default(uuid())
+  sku             String
+  quantity        Int
+  binLocation     String?
+  operationType   String
+  status          LockStatus @default(LOCKED)
+  operatorId      String
+  orderId         String?
+  transferId       String?
+  expiresAt       DateTime
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  committedAt     DateTime?
+  committedById   String?
+  releasedAt      DateTime?
+  releasedById    String?
+  releaseReason   String?
+
+  @@index([sku])
+  @@index([status])
+  @@index([expiresAt])
+  @@index([operatorId])
+  @@index([orderId])
+  @@index([transferId])
+  @@map("stock_locks")
+}
+
+enum LockStatus {
+  LOCKED
+  COMMITTED
+  RELEASED
+  EXPIRED
+}
+
+model InventoryTransaction {
+  id              String   @id @default(uuid())
+  sku             String
+  quantity        Int
+  operationType   String
+  operationId     String?
+  binLocation     String?
+  operatorId      String
+  siteId          String?
+  orderId         String?
+  transferId       String?
+  reason          String?
+  createdAt       DateTime @default(now())
+
+  @@index([sku])
+  @@index([operationId])
+  @@index([operatorId])
+  @@index([siteId])
+  @@index([orderId])
+  @@index([transferId])
+  @@index([createdAt])
+  @@map("inventory_transactions")
+}
+
+// ============================================
+// INVENTORY DRIFT & RECONCILIATION
+// ============================================
+
+model Discrepancy {
+  id               String            @id @default(uuid())
+  binLocation       String
+  sku              String
+  expectedQuantity  Int
+  actualQuantity    Int?
+  variance          Int
+  variancePercent    Float
+  siteId           String?
+  reportedBy        String
+  orderId           String?
+  transferId        String?
+  status            DiscrepancyStatus @default(OPEN)
+  cycleCountTaskId  String?
+  createdAt         DateTime           @default(now())
+  investigatedAt    DateTime?
+  investigatedBy    String?
+  investigationNotes String?
+  rootCause        String?
+  resolvedAt        DateTime?
+  resolvedBy        String?
+  resolution        String?
+
+  @@index([sku])
+  @@index([status])
+  @@index([binLocation])
+  @@index([siteId])
+  @@map("discrepancies")
+}
+
+enum DiscrepancyStatus {
+  OPEN
+  INVESTIGATING
+  RESOLVED
+  CLOSED
+}
+
+model CycleCountTask {
+  id          String   @id @default(uuid())
+  binLocation String
+  sku         String
+  priority    TaskPriority @default(NORMAL)
+  status      TaskStatus @default(PENDING)
+  assignedTo  String?
+  scheduledFor DateTime?
+  completedAt DateTime?
+  createdAt   DateTime @default(now())
+  notes       String?
+
+  @@index([status])
+  @@index([priority])
+  @@index([binLocation])
+  @@map("cycle_count_tasks")
+}
+
+enum TaskPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum TaskStatus {
+  PENDING
+  ASSIGNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+// ============================================
+// WEBHOOK LOGS
+// ============================================
+
+model WebhookLog {
+  id          String   @id @default(uuid())
+  eventType  String
+  payload     Json
+  statusCode Int?
+  response    Json?
+  attempt     Int      @default(1)
+  success     Boolean  @default(false)
+  error       String?
+  createdAt   DateTime @default(now())
+
+  @@index([eventType])
+  @@index([createdAt])
+  @@map("webhook_logs")
+}
+
+// ============================================
+// BATCH MANAGEMENT
+// ============================================
+
+enum BatchStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model Batch {
+  id            String       @id @default(uuid())
+  siteId        String
+  name          String
+  status        BatchStatus  @default(PENDING)
+  priority      String
+  courier       String?
+  totalOrders   Int
+  totalItems    Int
+  zones         String[]
+  createdBy     String
+  pickerId      String?
+  createdAt     DateTime      @default(now())
+  startedAt     DateTime?
+  completedAt   DateTime?
+  batchedAt     DateTime?
+  cancelledAt   DateTime?
+  cancelledBy   String?
+  cancelReason  String?
+  notes         String?
+
+  orders        BatchOrder[]
+
+  @@index([status])
+  @@index([siteId])
+  @@index([pickerId])
+  @@map("batches")
+}
+
+model BatchOrder {
+  id       String   @id @default(uuid())
+  batchId  String
+  orderId  String
+  batch    Batch    @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  @@index([batchId])
+  @@unique([batchId, orderId])
+  @@map("batch_orders")
+}
+
+// ============================================
+// TRANSFERS (MULTI-LOCATION)
+// ============================================
+
+enum TransferStatus {
+  PENDING
+  APPROVED
+  IN_TRANSIT
+  COMPLETED
+  RECEIVED_WITH_DISCREPANCY
+  CANCELLED
+}
+
+model InventoryTransfer {
+  id               String          @id @default(uuid())
+  sku               String
+  quantity          Int
+  fromSiteId        String
+  toSiteId          String
+  status            TransferStatus   @default(PENDING)
+  priority          String          @default("NORMAL")
+  lockId            String          @unique
+  requestedById     String
+  approvedById      String?
+  approvedAt        DateTime?
+  shippedById       String?
+  shippedAt         DateTime?
+  trackingNumber    String?
+  receivedById      String?
+  receivedAt        DateTime?
+  actualQuantity    Int?
+  discrepancyId     String          @unique
+  reason            String?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  fromSite          Site?          @relation("TransferFromSite", fields: [fromSiteId], references: [id], onDelete: Cascade)
+  toSite            Site?          @relation("TransferToSite", fields: [toSiteId], references: [id], onDelete: Cascade)
+  product           Product?        @relation(fields: [sku], references: [sku])
+
+  @@index([status])
+  @@index([fromSiteId])
+  @@index([toSiteId])
+  @@index([lockId])
+  @@map("inventory_transfers")
+}
+
+// ============================================
+// WAVE MANAGEMENT
+// ============================================
+
+enum WaveStatus {
+  PENDING
+  RELEASED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model Wave {
+  id               String     @id @default(uuid())
+  siteId           String
+  name              String
+  courier           String?
+  priority          String?
+  cutoffTime        DateTime?
+  totalOrders       Int
+  totalItems        Int
+  status            String @default("PENDING")
+  createdBy         String
+  releasedBy        String?
+  releasedAt        DateTime?
+  batchedAt         DateTime?
+  batchesCount      Int?
+  completedAt       DateTime?
+  cancelledAt       DateTime?
+  cancelledBy       String?
+  cancelReason      String?
+
+  orders            WaveOrder[]
+
+  @@index([siteId])
+  @@map("waves")
+}
+
+model WaveOrder {
+  id       String   @id @default(uuid())
+  waveId   String
+  orderId  String
+  wave     Wave     @relation(fields: [waveId], references: [id], onDelete: Cascade)
+
+  @@index([waveId])
+  @@unique([waveId, orderId])
+  @@map("wave_orders")
+}

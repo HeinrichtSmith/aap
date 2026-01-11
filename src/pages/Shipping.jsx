@@ -363,46 +363,46 @@ const Shipping = () => {
     <div className="min-h-screen flex flex-col">
       <ParticleEffect />
       {/* Header */}
-      <div className="glass-card border-b border-gray-700/50 p-6">
+      <div className="glass-card border-b border-[#1F2630] p-6">
         <div className="flex items-center justify-between mb-4">
           <BackButton />
         </div>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold text-[#E6EAF0]">
               Live Logistics Map
             </h1>
-            <p className="text-gray-400 mt-1">Real-time shipment tracking and analytics</p>
+            <p className="text-[#A0A7B4] mt-1">Real-time shipment tracking and analytics</p>
           </div>
-          
+
           {/* Quick Stats */}
           <div className="flex items-center space-x-8">
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-500">{stats.totalShipped}</div>
-              <div className="text-xs text-gray-400 font-medium">Total Shipped</div>
+              <div className="text-2xl font-bold text-[#3A86B6]">{stats.totalShipped}</div>
+              <div className="text-xs text-[#A0A7B4] font-medium">Total Shipped</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-yellow-500">{stats.inTransit}</div>
-              <div className="text-xs text-gray-400 font-medium">In Transit</div>
+              <div className="text-2xl font-bold text-[#4A96C6]">{stats.inTransit}</div>
+              <div className="text-xs text-[#A0A7B4] font-medium">In Transit</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-green-500">{stats.delivered}</div>
-              <div className="text-xs text-gray-400 font-medium">Delivered</div>
+              <div className="text-xs text-[#A0A7B4] font-medium">Delivered</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-red-500">{stalledShipments.length}</div>
-              <div className="text-xs text-gray-400 font-medium">Stalled</div>
+              <div className="text-xs text-[#A0A7B4] font-medium">Stalled</div>
             </div>
           </div>
-          
+
           {/* View Toggle */}
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setMapView('map')}
               className={`p-3 rounded-xl transition-all duration-200 ${
-                mapView === 'map' 
-                  ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25' 
-                  : 'glass-card hover:bg-white/10'
+                mapView === 'map'
+                  ? 'bg-gradient-to-r from-[#3A86B6] to-[#2A7696] text-white shadow-lg shadow-[#3A86B6]/25'
+                  : 'glass-card hover:bg-[#151A20]'
               }`}
             >
               <Globe size={20} />
@@ -410,9 +410,9 @@ const Shipping = () => {
             <button
               onClick={() => setMapView('list')}
               className={`p-3 rounded-xl transition-all duration-200 ${
-                mapView === 'list' 
-                  ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25' 
-                  : 'glass-card hover:bg-white/10'
+                mapView === 'list'
+                  ? 'bg-gradient-to-r from-[#3A86B6] to-[#2A7696] text-white shadow-lg shadow-[#3A86B6]/25'
+                  : 'glass-card hover:bg-[#151A20]'
               }`}
             >
               <List size={20} />
@@ -423,38 +423,38 @@ const Shipping = () => {
 
       <div className="flex-1 flex">
         {/* Controls Sidebar */}
-        <div className="w-80 glass-card border-r border-gray-700/50 p-6 space-y-6">
+        <div className="w-80 glass-card border-r border-[#1F2630] p-6 space-y-6">
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#A0A7B4]" size={18} />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search shipments..."
-              className="input-field w-full pl-10"
+              className="input-field w-full pl-10 bg-[#151A20] border-[#1F2630] text-[#E6EAF0] placeholder-[#6B7280]"
             />
           </div>
 
           {/* Filters */}
           <div className="space-y-4">
-            <h3 className="font-semibold text-gray-300">Filters</h3>
+            <h3 className="font-semibold text-[#E6EAF0]">Filters</h3>
             
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="input-field w-full"
+              className="input-field w-full bg-[#151A20] border-[#1F2630] text-[#E6EAF0]"
             >
               <option value="all">All Status</option>
               <option value="shipped">Shipped</option>
               <option value="in-transit">In Transit</option>
               <option value="delivered">Delivered</option>
             </select>
-            
+
             <select
               value={filterCarrier}
               onChange={(e) => setFilterCarrier(e.target.value)}
-              className="input-field w-full"
+              className="input-field w-full bg-[#151A20] border-[#1F2630] text-[#E6EAF0]"
             >
               <option value="all">All Carriers</option>
               {carriers.map(carrier => (
@@ -465,16 +465,16 @@ const Shipping = () => {
 
           {/* Stalled Shipments Alert */}
           {stalledShipments.length > 0 && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="glass-card bg-red-500/10 border border-red-500/30 rounded-xl p-4"
+              className="bg-red-500/10 border border-red-500/30 rounded-xl p-4"
             >
               <div className="flex items-center space-x-2 mb-3">
                 <AlertTriangle className="text-red-400" size={20} />
                 <h3 className="font-semibold text-red-400">Stalled Shipments</h3>
               </div>
-              <p className="text-sm text-gray-300 mb-4">
+              <p className="text-sm text-[#E6EAF0] mb-4">
                 {stalledShipments.length} shipments may be experiencing delays
               </p>
               <div className="space-y-2">
@@ -486,8 +486,8 @@ const Shipping = () => {
                     onClick={() => handleReportIssue(shipment.id, 'Potential Delay')}
                   >
                     <div>
-                      <p className="font-medium text-sm">{shipment.id}</p>
-                      <p className="text-xs text-gray-400">{shipment.hoursInTransit}h in transit</p>
+                      <p className="font-medium text-sm text-[#E6EAF0]">{shipment.id}</p>
+                      <p className="text-xs text-[#A0A7B4]">{shipment.hoursInTransit}h in transit</p>
                     </div>
                     <AlertTriangle size={16} className="text-red-400" />
                   </motion.div>
@@ -499,51 +499,51 @@ const Shipping = () => {
           {/* Map Controls */}
           {mapView === 'map' && (
             <div className="space-y-4">
-              <h3 className="font-semibold text-gray-300">Map Controls</h3>
+              <h3 className="font-semibold text-[#E6EAF0]">Map Controls</h3>
               
               <div className="flex space-x-2">
                 <button
                   onClick={() => setMapZoom(prev => Math.min(prev * 1.2, 3))}
-                  className="flex-1 p-3 glass-card hover:bg-white/10 rounded-lg transition-all"
+                  className="flex-1 p-3 bg-[#151A20] border border-[#1F2630] hover:bg-[#1A1F28] rounded-lg transition-all"
                 >
-                  <ZoomIn size={18} className="mx-auto" />
+                  <ZoomIn size={18} className="mx-auto text-[#E6EAF0]" />
                 </button>
                 <button
                   onClick={() => setMapZoom(prev => Math.max(prev / 1.2, 0.5))}
-                  className="flex-1 p-3 glass-card hover:bg-white/10 rounded-lg transition-all"
+                  className="flex-1 p-3 bg-[#151A20] border border-[#1F2630] hover:bg-[#1A1F28] rounded-lg transition-all"
                 >
-                  <ZoomOut size={18} className="mx-auto" />
+                  <ZoomOut size={18} className="mx-auto text-[#E6EAF0]" />
                 </button>
                 <button
                   onClick={() => { setMapZoom(1); setMapCenter({ x: 0, y: 0 }); }}
-                  className="flex-1 p-3 glass-card hover:bg-white/10 rounded-lg transition-all"
+                  className="flex-1 p-3 bg-[#151A20] border border-[#1F2630] hover:bg-[#1A1F28] rounded-lg transition-all"
                 >
-                  <Home size={18} className="mx-auto" />
+                  <Home size={18} className="mx-auto text-[#E6EAF0]" />
                 </button>
               </div>
-              
+
               <label className="flex items-center space-x-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={showHeatmap}
                   onChange={(e) => setShowHeatmap(e.target.checked)}
-                  className="w-4 h-4 rounded accent-blue-500"
+                  className="w-4 h-4 rounded accent-[#3A86B6]"
                 />
-                <span className="text-sm text-gray-300">Show Delivery Heatmap</span>
+                <span className="text-sm text-[#E6EAF0]">Show Delivery Heatmap</span>
               </label>
             </div>
           )}
 
           {/* Timeline Controls */}
           <div className="space-y-4">
-            <h3 className="font-semibold text-gray-300">Timeline Playback</h3>
+            <h3 className="font-semibold text-[#E6EAF0]">Timeline Playback</h3>
             
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => setTimelineActive(!timelineActive)}
                 className={`p-3 rounded-lg transition-all ${
-                  timelineActive 
-                    ? 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700' 
+                  timelineActive
+                    ? 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700'
                     : 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700'
                 } text-white shadow-lg`}
               >
@@ -551,15 +551,15 @@ const Shipping = () => {
               </button>
               <button
                 onClick={() => { setCurrentTime(24); setTimelineActive(false); }}
-                className="p-3 glass-card hover:bg-white/10 rounded-lg transition-all"
+                className="p-3 bg-[#151A20] border border-[#1F2630] hover:bg-[#1A1F28] rounded-lg transition-all"
               >
-                <RotateCcw size={18} />
+                <RotateCcw size={18} className="text-[#E6EAF0]" />
               </button>
-              <span className="text-sm text-gray-400 font-medium">
+              <span className="text-sm text-[#A0A7B4] font-medium">
                 {Math.round(currentTime)}h ago
               </span>
             </div>
-            
+
             <div className="space-y-2">
               <input
                 type="range"
@@ -567,12 +567,12 @@ const Shipping = () => {
                 max={timelineRange}
                 value={currentTime}
                 onChange={(e) => handleTimelineChange(Number(e.target.value))}
-                className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+                className="w-full h-2 bg-[#151A20] rounded-lg appearance-none cursor-pointer slider"
                 style={{
-                  background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${(currentTime / timelineRange) * 100}%, #374151 ${(currentTime / timelineRange) * 100}%, #374151 100%)`
+                  background: `linear-gradient(to right, #3A86B6 0%, #3A86B6 ${(currentTime / timelineRange) * 100}%, #151A20 ${(currentTime / timelineRange) * 100}%, #151A20 100%)`
                 }}
               />
-              <div className="flex justify-between text-xs text-gray-400">
+              <div className="flex justify-between text-xs text-[#A0A7B4]">
                 <span>48h ago</span>
                 <span>24h ago</span>
                 <span>Now</span>
@@ -590,10 +590,10 @@ const Shipping = () => {
               <AlertTriangle className="mr-2" size={18} />
               Report Issue
             </button>
-            
+
             <button
               onClick={() => window.print()}
-              className="w-full p-3 glass-card hover:bg-white/10 rounded-xl transition-all flex items-center justify-center"
+              className="w-full p-3 bg-[#151A20] border border-[#1F2630] hover:bg-[#1A1F28] rounded-xl transition-all flex items-center justify-center text-[#E6EAF0]"
             >
               <Printer className="mr-2" size={18} />
               Print Reports
@@ -636,7 +636,7 @@ const Shipping = () => {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="w-96 glass-card border-l border-gray-700/50 p-6 overflow-y-auto"
+              className="w-96 glass-card border-l border-[#1F2630] p-6 overflow-y-auto"
             >
               <ShipmentDetailPanel
                 shipment={selectedShipment}
@@ -661,10 +661,10 @@ const Shipping = () => {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="modal-content max-w-lg w-full p-6"
+              className="modal-content max-w-lg w-full p-6 bg-[#151A20] border border-[#1F2630] rounded-xl"
             >
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-semibold">Report Shipping Issue</h3>
+                <h3 className="text-xl font-semibold text-[#E6EAF0]">Report Shipping Issue</h3>
                 <button
                   onClick={() => setShowReportIssue(false)}
                   className="close-btn"
@@ -675,11 +675,11 @@ const Shipping = () => {
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Shipment ID</label>
+                  <label className="block text-sm font-medium text-[#E6EAF0] mb-2">Shipment ID</label>
                   <select
                     value={issueDetails.shipmentId}
                     onChange={(e) => setIssueDetails({...issueDetails, shipmentId: e.target.value})}
-                    className="input-field w-full"
+                    className="input-field w-full bg-[#151A20] border-[#1F2630] text-[#E6EAF0]"
                   >
                     <option value="">Select shipment...</option>
                     {shipments.map(shipment => (
@@ -691,11 +691,11 @@ const Shipping = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Issue Type</label>
+                  <label className="block text-sm font-medium text-[#E6EAF0] mb-2">Issue Type</label>
                   <select
                     value={issueDetails.issue}
                     onChange={(e) => setIssueDetails({...issueDetails, issue: e.target.value})}
-                    className="input-field w-full"
+                    className="input-field w-full bg-[#151A20] border-[#1F2630] text-[#E6EAF0]"
                   >
                     <option value="">Select issue type...</option>
                     {issueTypes.map(issue => (
@@ -705,11 +705,11 @@ const Shipping = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Additional Notes</label>
+                  <label className="block text-sm font-medium text-[#E6EAF0] mb-2">Additional Notes</label>
                   <textarea
                     value={issueDetails.notes}
                     onChange={(e) => setIssueDetails({...issueDetails, notes: e.target.value})}
-                    className="input-field w-full resize-none"
+                    className="input-field w-full resize-none bg-[#151A20] border-[#1F2630] text-[#E6EAF0] placeholder-[#6B7280]"
                     rows={3}
                     placeholder="Provide additional details..."
                   />
@@ -725,7 +725,7 @@ const Shipping = () => {
                   </button>
                   <button
                     onClick={() => setShowReportIssue(false)}
-                    className="flex-1 p-3 glass-card hover:bg-white/10 rounded-xl transition-all"
+                    className="flex-1 p-3 bg-[#151A20] border border-[#1F2630] hover:bg-[#1A1F28] rounded-xl transition-all text-[#E6EAF0]"
                   >
                     Cancel
                   </button>
@@ -774,8 +774,8 @@ const MapView = ({
           {/* Map background glow */}
           <defs>
             <radialGradient id="mapGlow">
-              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.2" />
-              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+              <stop offset="0%" stopColor="#3A86B6" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#3A86B6" stopOpacity="0" />
             </radialGradient>
             <filter id="glow">
               <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
@@ -785,16 +785,16 @@ const MapView = ({
               </feMerge>
             </filter>
           </defs>
-          
+
           {/* Simplified NZ Map Outline */}
           <path
             d="M 450 100 Q 480 80 520 100 Q 560 120 580 160 Q 600 200 590 250 Q 580 300 560 340 Q 540 380 520 400 Q 500 420 480 440 Q 460 460 450 480 Q 440 500 450 520 Q 460 540 480 560 Q 500 580 520 590 Q 540 600 560 610 Q 580 620 600 640 Q 620 660 600 680 Q 580 700 560 690 Q 540 680 520 670 Q 500 660 480 650 Q 460 640 440 630 Q 420 620 410 600 Q 400 580 410 560 Q 420 540 430 520 Q 440 500 430 480 Q 420 460 410 440 Q 400 420 410 400 Q 420 380 430 360 Q 440 340 450 320 Q 460 300 470 280 Q 480 260 470 240 Q 460 220 450 200 Q 440 180 430 160 Q 420 140 430 120 Q 440 100 450 100 Z"
-            fill="#0a0a0a"
-            stroke="#1e293b"
+            fill="#0B0D10"
+            stroke="#1F2630"
             strokeWidth="2"
             filter="url(#glow)"
           />
-          
+
           {/* Warehouse Location */}
           <motion.g
             initial={{ scale: 0 }}
@@ -805,8 +805,8 @@ const MapView = ({
               cx={WAREHOUSE_LOCATION.x}
               cy={WAREHOUSE_LOCATION.y}
               r="10"
-              fill="#3b82f6"
-              stroke="#1e40af"
+              fill="#3A86B6"
+              stroke="#2A7696"
               strokeWidth="3"
               filter="url(#glow)"
             />
@@ -814,13 +814,13 @@ const MapView = ({
               x={WAREHOUSE_LOCATION.x}
               y={WAREHOUSE_LOCATION.y - 18}
               textAnchor="middle"
-              className="fill-white text-sm font-semibold"
+              className="fill-[#E6EAF0] text-sm font-semibold"
               style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
             >
               Warehouse
             </text>
           </motion.g>
-          
+
           {/* Cities */}
           {Object.entries(NZ_CITIES).map(([city, pos]) => (
             <g key={city}>
@@ -828,15 +828,15 @@ const MapView = ({
                 cx={pos.x}
                 cy={pos.y}
                 r="5"
-                fill="#374151"
-                stroke="#4b5563"
+                fill="#151A20"
+                stroke="#1F2630"
                 strokeWidth="1.5"
               />
               <text
                 x={pos.x}
                 y={pos.y - 12}
                 textAnchor="middle"
-                className="fill-gray-400 text-xs font-medium"
+                className="fill-[#A0A7B4] text-xs font-medium"
                 style={{ textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}
               >
                 {city}
@@ -885,8 +885,8 @@ const MapView = ({
                       cx={cluster.x}
                       cy={cluster.y}
                       r="18"
-                      fill="#3b82f6"
-                      stroke="#1e40af"
+                      fill="#3A86B6"
+                      stroke="#2A7696"
                       strokeWidth="2"
                       filter="url(#glow)"
                     />
@@ -894,7 +894,7 @@ const MapView = ({
                       x={cluster.x}
                       y={cluster.y + 5}
                       textAnchor="middle"
-                      className="fill-white text-sm font-bold pointer-events-none"
+                      className="fill-[#E6EAF0] text-sm font-bold pointer-events-none"
                     >
                       {clusterShipments.length}
                     </text>
@@ -1043,39 +1043,39 @@ const ListView = ({ shipments, onShipmentClick, getCarrierColor, stalledShipment
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
-            className="glass-card p-6 rounded-xl hover:bg-white/5 cursor-pointer transition-all group"
+            className="bg-[#151A20] border border-[#1F2630] p-6 rounded-xl hover:bg-[#1A1F28] cursor-pointer transition-all group"
             onClick={() => onShipmentClick(shipment)}
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center space-x-3 mb-3">
-                  <h3 className="font-semibold text-lg">{shipment.id}</h3>
+                  <h3 className="font-semibold text-lg text-[#E6EAF0]">{shipment.id}</h3>
                   <span
                     className="w-3 h-3 rounded-full"
                     style={{ backgroundColor: getCarrierColor(shipment.carrier) }}
                   />
-                  <span className="text-sm text-gray-400">{shipment.carrier}</span>
+                  <span className="text-sm text-[#A0A7B4]">{shipment.carrier}</span>
                   {stalledShipments.includes(shipment) && (
                     <span className="px-2 py-1 bg-red-500/20 text-red-400 text-xs rounded-full font-medium">
                       STALLED
                     </span>
                   )}
                 </div>
-                
+
                 <div className="grid grid-cols-3 gap-6 text-sm">
                   <div>
-                    <p className="text-gray-400 mb-1">Customer</p>
-                    <p className="font-medium">{shipment.customer.name}</p>
+                    <p className="text-[#A0A7B4] mb-1">Customer</p>
+                    <p className="font-medium text-[#E6EAF0]">{shipment.customer.name}</p>
                   </div>
                   <div>
-                    <p className="text-gray-400 mb-1">Destination</p>
-                    <p className="font-medium">{shipment.destination}</p>
+                    <p className="text-[#A0A7B4] mb-1">Destination</p>
+                    <p className="font-medium text-[#E6EAF0]">{shipment.destination}</p>
                   </div>
                   <div>
-                    <p className="text-gray-400 mb-1">Status</p>
+                    <p className="text-[#A0A7B4] mb-1">Status</p>
                     <p className={`font-medium ${
                       shipment.status === 'delivered' ? 'text-green-400' :
-                      shipment.status === 'in-transit' ? 'text-blue-400' :
+                      shipment.status === 'in-transit' ? 'text-[#3A86B6]' :
                       'text-yellow-400'
                     }`}>
                       {shipment.status.toUpperCase()}
@@ -1083,12 +1083,12 @@ const ListView = ({ shipments, onShipmentClick, getCarrierColor, stalledShipment
                   </div>
                 </div>
               </div>
-              
+
               <div className="text-right">
-                <p className="text-sm text-gray-400 mb-1">
+                <p className="text-sm text-[#A0A7B4] mb-1">
                   {shipment.hoursInTransit}h in transit
                 </p>
-                <p className="text-xs text-gray-500 font-mono">
+                <p className="text-xs text-[#6B7280] font-mono">
                   {shipment.trackingNumber}
                 </p>
               </div>
@@ -1113,7 +1113,7 @@ const ShipmentDetailPanel = ({ shipment, onClose, onReportIssue }) => {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold">{shipment.id}</h2>
+        <h2 className="text-xl font-bold text-[#E6EAF0]">{shipment.id}</h2>
         <button
           onClick={onClose}
           className="close-btn"
@@ -1123,14 +1123,14 @@ const ShipmentDetailPanel = ({ shipment, onClose, onReportIssue }) => {
       </div>
 
       {/* Journey Tracker */}
-      <div className="glass-card p-4 rounded-xl">
-        <h3 className="font-semibold mb-4 text-gray-300">Delivery Journey</h3>
+      <div className="bg-[#151A20] border border-[#1F2630] p-4 rounded-xl">
+        <h3 className="font-semibold mb-4 text-[#E6EAF0]">Delivery Journey</h3>
         <div className="space-y-3">
           {journeySteps.map((step, index) => (
             <div key={step.label} className="flex items-center space-x-3">
-              <motion.div 
+              <motion.div
                 className={`w-4 h-4 rounded-full ${
-                  step.completed ? 'bg-green-500' : 'bg-gray-600'
+                  step.completed ? 'bg-green-500' : 'bg-[#1F2630]'
                 }`}
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
@@ -1138,12 +1138,12 @@ const ShipmentDetailPanel = ({ shipment, onClose, onReportIssue }) => {
               />
               <div className="flex-1">
                 <p className={`font-medium ${
-                  step.completed ? 'text-white' : 'text-gray-400'
+                  step.completed ? 'text-[#E6EAF0]' : 'text-[#6B7280]'
                 }`}>
                   {step.label}
                 </p>
                 {step.timestamp && (
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-[#A0A7B4]">
                     {new Date(step.timestamp).toLocaleString()}
                   </p>
                 )}
@@ -1154,53 +1154,53 @@ const ShipmentDetailPanel = ({ shipment, onClose, onReportIssue }) => {
       </div>
 
       {/* Mini Map */}
-      <div className="glass-card p-4 rounded-xl">
-        <h3 className="font-semibold mb-3 text-gray-300">Route</h3>
-        <div className="h-32 bg-gray-800/50 rounded-lg flex items-center justify-center">
-          <p className="text-gray-500 text-sm">Mini route map visualization</p>
+      <div className="bg-[#151A20] border border-[#1F2630] p-4 rounded-xl">
+        <h3 className="font-semibold mb-3 text-[#E6EAF0]">Route</h3>
+        <div className="h-32 bg-[#0B0D10] rounded-lg flex items-center justify-center">
+          <p className="text-[#6B7280] text-sm">Mini route map visualization</p>
         </div>
       </div>
 
       {/* Shipment Details */}
-      <div className="glass-card p-4 rounded-xl">
-        <h3 className="font-semibold mb-4 text-gray-300">Details</h3>
+      <div className="bg-[#151A20] border border-[#1F2630] p-4 rounded-xl">
+        <h3 className="font-semibold mb-4 text-[#E6EAF0]">Details</h3>
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
-            <p className="text-gray-400 mb-1">Carrier</p>
-            <p className="font-medium">{shipment.carrier}</p>
+            <p className="text-[#A0A7B4] mb-1">Carrier</p>
+            <p className="font-medium text-[#E6EAF0]">{shipment.carrier}</p>
           </div>
           <div>
-            <p className="text-gray-400 mb-1">Tracking</p>
-            <p className="font-medium font-mono text-xs">{shipment.trackingNumber}</p>
+            <p className="text-[#A0A7B4] mb-1">Tracking</p>
+            <p className="font-medium font-mono text-xs text-[#E6EAF0]">{shipment.trackingNumber}</p>
           </div>
           <div>
-            <p className="text-gray-400 mb-1">Weight</p>
-            <p className="font-medium">{shipment.weight}kg</p>
+            <p className="text-[#A0A7B4] mb-1">Weight</p>
+            <p className="font-medium text-[#E6EAF0]">{shipment.weight}kg</p>
           </div>
           <div>
-            <p className="text-gray-400 mb-1">Cost</p>
-            <p className="font-medium">${shipment.cost.toFixed(2)}</p>
+            <p className="text-[#A0A7B4] mb-1">Cost</p>
+            <p className="font-medium text-[#E6EAF0]">${shipment.cost.toFixed(2)}</p>
           </div>
         </div>
       </div>
 
       {/* Items */}
-      <div className="glass-card p-4 rounded-xl">
-        <h3 className="font-semibold mb-4 text-gray-300">Items ({shipment.items.length})</h3>
+      <div className="bg-[#151A20] border border-[#1F2630] p-4 rounded-xl">
+        <h3 className="font-semibold mb-4 text-[#E6EAF0]">Items ({shipment.items.length})</h3>
         <div className="space-y-2">
           {shipment.items.map((item, index) => (
-            <motion.div 
-              key={index} 
-              className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg"
+            <motion.div
+              key={index}
+              className="flex items-center justify-between p-3 bg-[#0B0D10] rounded-lg"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.1 }}
             >
               <div>
-                <p className="font-medium">{item.name}</p>
-                <p className="text-sm text-gray-400">{item.sku}</p>
+                <p className="font-medium text-[#E6EAF0]">{item.name}</p>
+                <p className="text-sm text-[#A0A7B4]">{item.sku}</p>
               </div>
-              <span className="font-mono text-gray-300">×{item.quantity}</span>
+              <span className="font-mono text-[#E6EAF0]">×{item.quantity}</span>
             </motion.div>
           ))}
         </div>
@@ -1216,18 +1216,18 @@ const ShipmentDetailPanel = ({ shipment, onClose, onReportIssue }) => {
           <AlertTriangle className="mr-2" size={18} />
           Report Issue
         </button>
-        
+
         <button
           onClick={() => console.log('Print label')}
-          className="w-full btn-primary flex items-center justify-center"
+          className="w-full bg-gradient-to-r from-[#3A86B6] to-[#2A7696] hover:from-[#4A96C6] hover:to-[#3A86B6] text-white p-3 rounded-xl transition-all flex items-center justify-center"
         >
           <Printer className="mr-2" size={18} />
           Print Label
         </button>
-        
+
         <button
           onClick={() => window.open(`https://tracking.${shipment.carrier.toLowerCase().replace(' ', '')}.com/${shipment.trackingNumber}`, '_blank')}
-          className="w-full p-3 glass-card hover:bg-white/10 rounded-xl transition-all flex items-center justify-center"
+          className="w-full p-3 bg-[#151A20] border border-[#1F2630] hover:bg-[#1A1F28] rounded-xl transition-all flex items-center justify-center text-[#E6EAF0]"
         >
           <Navigation className="mr-2" size={18} />
           Track with Carrier

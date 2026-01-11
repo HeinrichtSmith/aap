@@ -9,6 +9,7 @@ import { playSound } from '../utils/audio';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useWarehouse } from '../hooks/useWarehouseContext';
 import { useBatchedUpdates } from '../hooks/useBatchedUpdates';
+import api from '../services/api';
 
 // Lazy load heavy components
 const PackagingSelectionScreen = lazy(() => import('../components/packing/PackagingSelectionScreen'));
@@ -41,7 +42,7 @@ const Packing = () => {
     setTotes(sortedTotes);
   }, [sortedTotes]);
 
-  // Ensure body has the correct background class
+  // Ensure body has correct background class
   useEffect(() => {
     // The body background should be handled by app.css
     return () => {
@@ -226,40 +227,27 @@ const Packing = () => {
     };
   };
 
-  const handleNewOrder = useCallback(() => {
-    // Create packed order data
-    const packedOrder = {
-      id: `PACK-${Date.now()}`,
-      orderId: selectedTote.orderId,
-      customer: selectedTote.customer,
-      priority: selectedTote.priority,
-      pickedDate: selectedTote.pickedDate,
-      packedDate: new Date().toISOString(),
-      items: selectedTote.items,
-      packaging: selectedPackage,
-      trackingNumber: `NZ${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
-      status: 'ready_to_ship'
-    };
-    
-    // Remove the completed tote from local state
-    const remainingTotes = totes.filter(t => t.id !== selectedTote.id);
-    
-    // Sort remaining totes by priority
-    const sortedTotes = [...remainingTotes].sort((a, b) => {
-      const priorityOrder = { urgent: 0, overnight: 1, normal: 2 };
-      return priorityOrder[a.priority] - priorityOrder[b.priority];
-    });
-    
-    // Batch all state updates
-    batchUpdates(() => {
-      // Add to packed orders
-      setPackedOrders(prev => [...prev, packedOrder]);
+  const handleNewOrder = useCallback(async () => {
+    try {
+      // Get order ID - handle both 'id' and 'orderId' field names
+      const orderId = selectedTote.id || selectedTote.orderId;
       
-      // Remove from picked orders
-      setPickedOrders(prev => prev.filter(t => t.id !== selectedTote.id));
+      if (!orderId) {
+        console.error('No order ID found:', selectedTote);
+        alert('Error: Unable to identify order. Please try selecting order again.');
+        return;
+      }
       
-      // Update local totes
-      setTotes(sortedTotes);
+      // Update order status to PACKED via API - backend is single source of truth
+      await api.orders.updateStatus(orderId, 'PACKED');
+      
+      // Reload orders from backend to ensure sync
+      const freshPickedOrders = await api.orders.getByStatus('READY_TO_PACK');
+      const freshPackedOrders = await api.orders.getByStatus('PACKED');
+      
+      // Update state with fresh backend data
+      setPickedOrders(freshPickedOrders);
+      setPackedOrders(freshPackedOrders);
       
       // Update user stats for packing
       if (user) {
@@ -286,11 +274,11 @@ const Packing = () => {
         addXP(totalXP, `Packed order ${selectedTote.orderId}`);
       }
       
-      // Check if there are any totes left
-      if (sortedTotes.length > 0) {
-        // Automatically select the next highest priority tote
-        const nextTote = sortedTotes[0];
-        setSelectedTote(nextTote);
+      // Check if there are any picked orders left
+      if (freshPickedOrders.length > 0) {
+        // Automatically select next highest priority order
+        const nextOrder = freshPickedOrders[0];
+        setSelectedTote(nextOrder);
         setPackingTime(null);
         setSelectedPackage(null);
         setPackingStats(null);
@@ -306,8 +294,12 @@ const Packing = () => {
         setScannedItems([]);
         setCurrentScreen('toteSelection');
       }
-    });
-  }, [selectedTote, selectedPackage, totes, batchUpdates, setPackedOrders, setPickedOrders, user, packingTime, updateStats, addXP]);
+    } catch (error) {
+      console.error('Error packing order:', error);
+      alert('Failed to update order status. Please check your connection and try again.');
+      // Don't fall back to local state - backend must be single source of truth
+    }
+  }, [selectedTote, batchUpdates, setPickedOrders, setPackedOrders, user, packingTime, updateStats, addXP]);
 
   const handleEdit = useCallback(() => {
     setCurrentScreen('packing');

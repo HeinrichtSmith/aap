@@ -67,7 +67,7 @@ const uiReducer = (state, action) => {
 };
 
 const StockControl = () => {
-  const { addXP } = useWarehouse();
+  const { updateStats } = useWarehouse();
   
   // Consolidated UI state using useReducer
   const [uiState, dispatch] = useReducer(uiReducer, {
@@ -288,9 +288,8 @@ const StockControl = () => {
     playSound('click');
     startTransition(() => {
       dispatch({ type: 'SET_SELECTED_ITEM', item });
-      addXP(5, 'Item Inspection');
     });
-  }, [addXP]);
+  }, []);
 
   const handleAdjustStock = useCallback((item, adjustment) => {
     playSound('success');
@@ -319,39 +318,31 @@ const StockControl = () => {
       return updatedItems;
     });
 
-    // Award XP
-    addXP(20, 'Stock Adjustment');
-    
     // Check achievements
     if (!achievements.firstAdjustment) {
       setAchievements(prev => ({ ...prev, firstAdjustment: true }));
-      addXP(50, 'First Adjustment!');
       playSound('achievement');
-      dispatch({ type: 'SHOW_ACHIEVEMENT', achievement: { name: 'First Adjustment!', xp: 50 } });
+      dispatch({ type: 'SHOW_ACHIEVEMENT', achievement: { name: 'First Adjustment!' } });
     }
 
     toast.success(`Stock ${adjustment > 0 ? 'added' : 'removed'} successfully`);
-  }, [addXP, achievements.firstAdjustment, updateStockStats]);
+  }, [achievements.firstAdjustment, updateStockStats]);
 
 
   const handleAudit = (item, auditData) => {
     playSound('success');
-    
+
     const discrepancy = Math.abs(item.quantity - auditData.counted);
-    
+
     if (discrepancy === 0) {
-      addXP(50, 'Perfect Audit!');
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 5000);
-      
+
       if (!achievements.perfectAudit) {
         setAchievements(prev => ({ ...prev, perfectAudit: true }));
-        addXP(100, 'Achievement: Perfect Audit!');
         playSound('achievement');
-        dispatch({ type: 'SHOW_ACHIEVEMENT', achievement: { name: 'Perfect Audit Master!', xp: 100 } });
+        dispatch({ type: 'SHOW_ACHIEVEMENT', achievement: { name: 'Perfect Audit Master!' } });
       }
-    } else {
-      addXP(30, 'Audit Complete');
     }
 
     // Update item
@@ -594,7 +585,7 @@ const StockControl = () => {
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
                 onMouseEnter={() => playSound('hover')}
-                onClick={() => setShowAddStockModal(true)}
+                onClick={() => dispatch({ type: 'TOGGLE_MODAL', modal: 'showAddStockModal', value: true })}
                 className="relative px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-2xl font-medium shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transition-all duration-300 flex items-center gap-2 overflow-hidden group"
               >
                 <motion.div
@@ -1102,11 +1093,10 @@ const StockControl = () => {
               const newItems = [...stockItems, { ...newItem, id: `STK-${Date.now()}` }];
               setStockItems(newItems);
               updateStockStats(newItems);
-              addXP(30, 'New Stock Added');
               playSound('success');
               toast.success('Stock item added successfully');
             }}
-            onClose={() => setShowAddStockModal(false)}
+            onClose={() => dispatch({ type: 'TOGGLE_MODAL', modal: 'showAddStockModal', value: false })}
           />
         )}
         
@@ -2710,9 +2700,15 @@ const WarehouseView = ({ binData, stockItems, selectedBin, hoveredBin, onBinHove
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => {
-                  setTransferMode(!transferMode);
+                  // Properly reset all transfer state
+                  setTransferMode(prev => !prev);
                   setSourceBin(null);
                   setTargetBin(null);
+                  setSelectedTransferStock(null);
+                  setSelectedTransferZone('');
+                  setSelectedTransferBin('');
+                  setTransferQuantity(1);
+                  setShowTransferSection(false);
                   playSound('click');
                 }}
                 className={`relative px-4 py-2 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 overflow-hidden ${
@@ -3017,10 +3013,15 @@ const WarehouseView = ({ binData, stockItems, selectedBin, hoveredBin, onBinHove
                 <g 
                   key={zone}
                   onClick={() => {
-                    if (zone === 'OUT' && transferMode) {
+                    if (transferMode) {
                       // Easter egg: clicking OUT exits transfer mode
                       setTransferMode(false);
                       setSourceBin(null);
+                      setTargetBin(null);
+                      setSelectedTransferStock(null);
+                      setSelectedTransferZone('');
+                      setSelectedTransferBin('');
+                      setTransferQuantity(1);
                       setTargetBin(null);
                       playSound('success');
                       // Show a fun achievement
@@ -4031,8 +4032,7 @@ const WarehouseView = ({ binData, stockItems, selectedBin, hoveredBin, onBinHove
                           playSound('success');
                           const item = stockItems.find(i => i.sku === selectedTransferStock.sku);
                           toast.success(`Transferred ${transferQuantity} units of ${item?.name || selectedTransferStock.sku}`);
-                          addXP(25, 'Stock Transfer');
-                          
+
                           // Reset form
                           setSelectedTransferStock(null);
                           setTransferQuantity(1);
@@ -4072,8 +4072,7 @@ const WarehouseView = ({ binData, stockItems, selectedBin, hoveredBin, onBinHove
               // Process bin audit
               toast.success(`Bin ${selectedBin?.id} audit completed!`);
               playSound('success');
-              addXP(50); // Award XP for completing bin audit
-              
+
               // Update bin data with audit results
               const updatedBin = {
                 ...selectedBin,

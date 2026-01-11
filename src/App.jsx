@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, NavLink, useNavigate, Navigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Package, 
-  Home, 
-  PackageOpen, 
+import {
+  Package,
+  Home,
+  PackageOpen,
   ClipboardList,
   PackageCheck,
   Truck,
@@ -32,13 +32,17 @@ import {
   Users,
   AlertTriangle,
   RefreshCw,
-  ArrowLeft
+  ArrowLeft,
+  Settings,
+  Volume2,
+  VolumeX,
+  Sparkles
 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 
 // Import the WarehouseProvider and useWarehouse hook
 import { WarehouseProvider, useWarehouse } from './hooks/useWarehouseContext';
-import { SettingsProvider } from './hooks/useSettings';
+import { SettingsProvider, useSettings } from './hooks/useSettings';
 
 // Import audio utilities for universal sound support
 import { initializeAudio, isAudioInitialized, playSound } from './utils/audio';
@@ -53,7 +57,6 @@ import Profile from './pages/Profile';
 import Products from './pages/Products';
 import Login from './pages/Login';
 import Shipping from './pages/Shipping';
-import XPProgressBar from './components/XPProgressBar';
 import ProgressRing from './components/ProgressRing';
 import Presentation from './pages/Presentation';
 import PresentationWrapper from './components/PresentationWrapper';
@@ -306,17 +309,22 @@ const SearchModal = ({ isOpen, onClose }) => {
 
   const searchableItems = [
     { type: 'order', id: 'ORD-2025-001', description: 'Auckland Security - 5 items', path: '/picking' },
-    { type: 'product', id: 'ARM-SENS-001', description: 'PIR Motion Sensor', path: '/products' },
+    { type: 'product', id: 'ARM-SENS-001', description: 'PIR Motion Sensor', path: '/products', sku: 'ARM-SENS-001' },
     { type: 'po', id: 'PO-2025-001', description: 'TechSense Ltd - $14,000', path: '/inwards' },
   ];
 
-  const filteredItems = searchableItems.filter(item => 
+  const filteredItems = searchableItems.filter(item =>
     item.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
     item.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleSelect = (item) => {
-    navigate(item.path);
+    // If it's a product, navigate with SKU parameter
+    if (item.type === 'product' && item.sku) {
+      navigate(`${item.path}?sku=${item.sku}`);
+    } else {
+      navigate(item.path);
+    }
     onClose();
     setSearchQuery('');
     playSound('success');
@@ -481,6 +489,167 @@ const NotificationsPanel = ({ isOpen, onClose }) => {
   );
 };
 
+// Settings Panel Component
+const SettingsPanel = ({ isOpen, onClose }) => {
+  const { settings, updateSettings } = useSettings();
+
+  if (!isOpen) return null;
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-40"
+            onClick={onClose}
+          />
+          <motion.div
+            initial={{ x: 400, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: 400, opacity: 0 }}
+            className="fixed right-0 top-20 h-[calc(100%-5rem)] w-96 bg-gray-900 border-l border-gray-800 shadow-2xl z-50 rounded-tl-xl"
+          >
+            <div className="p-6 border-b border-gray-800">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-bold text-white flex items-center space-x-2">
+                  <Settings size={24} />
+                  <span>Settings</span>
+                </h2>
+                <button
+                  onClick={() => {
+                    onClose();
+                    playSound('click');
+                  }}
+                  onMouseEnter={() => playSound('hover')}
+                  className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+                >
+                  <X size={20} className="text-gray-400" />
+                </button>
+              </div>
+            </div>
+
+            <div className="p-6 space-y-6 overflow-y-auto h-[calc(100%-5rem)]">
+              {/* Sound Effects Toggle */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    {settings.soundEffects ? (
+                      <Volume2 className="text-blue-400" size={20} />
+                    ) : (
+                      <VolumeX className="text-gray-500" size={20} />
+                    )}
+                    <div>
+                      <h3 className="font-medium text-white">Sound Effects</h3>
+                      <p className="text-sm text-gray-400">Enable UI sound effects</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      updateSettings({ soundEffects: !settings.soundEffects });
+                      if (!settings.soundEffects) playSound('click');
+                    }}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                      settings.soundEffects ? 'bg-blue-500' : 'bg-gray-700'
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        settings.soundEffects ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
+                  </button>
+                </div>
+              </div>
+
+              {/* Volume Level */}
+              {settings.soundEffects && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="space-y-2"
+                >
+                  <label className="block">
+                    <span className="text-white font-medium">Volume: {settings.volumeLevel}%</span>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={settings.volumeLevel}
+                      onChange={(e) => updateSettings({ volumeLevel: parseInt(e.target.value) })}
+                      className="w-full mt-2 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                    />
+                  </label>
+                </motion.div>
+              )}
+
+              <div className="h-px bg-gray-800" />
+
+              {/* Extra Effects Toggle */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <Sparkles className={settings.showAnimations ? "text-purple-400" : "text-gray-500"} size={20} />
+                    <div>
+                      <h3 className="font-medium text-white">Extra Effects</h3>
+                      <p className="text-sm text-gray-400">Enable visual animations</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      updateSettings({ showAnimations: !settings.showAnimations });
+                      playSound('click');
+                    }}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                      settings.showAnimations ? 'bg-purple-500' : 'bg-gray-700'
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        settings.showAnimations ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
+                  </button>
+                </div>
+              </div>
+
+              <div className="h-px bg-gray-800" />
+
+              {/* Achievement Notifications Toggle */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <Bell className={settings.achievementNotifications ? "text-green-400" : "text-gray-500"} size={20} />
+                    <div>
+                      <h3 className="font-medium text-white">Achievement Notifications</h3>
+                      <p className="text-sm text-gray-400">Show achievement popups</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      updateSettings({ achievementNotifications: !settings.achievementNotifications });
+                      playSound('click');
+                    }}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                      settings.achievementNotifications ? 'bg-green-500' : 'bg-gray-700'
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        settings.achievementNotifications ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+};
+
 // Navigation Component
 const Navigation = () => {
   const { user, logout, notifications } = useApp();
@@ -489,6 +658,7 @@ const Navigation = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [pickingData, setPickingData] = useState(null);
 
   // Poll for picking page data updates
@@ -610,7 +780,7 @@ const Navigation = () => {
 
             {/* Center - Logo (absolutely centered) */}
             <div className="absolute left-1/2 transform -translate-x-1/2">
-              <motion.button 
+              <motion.button
                 className="flex items-center space-x-3 cursor-pointer"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -624,13 +794,8 @@ const Navigation = () => {
                 }}
                 onMouseEnter={() => playSound('hover')}
               >
-                <div 
-                  className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25 logo-animation"
-                >
-                  <Package size={36} className="text-white" />
-                </div>
                 <div>
-                  <h1 className="text-3xl font-bold text-white tracking-tight">Arrowhead Polaris</h1>
+                  <h1 className="text-3xl font-bold text-white tracking-tight">OpsUI</h1>
                 </div>
               </motion.button>
             </div>
@@ -698,23 +863,24 @@ const Navigation = () => {
               )}
               
               {/* Notifications button */}
-              <motion.button 
+              <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => {
                   setShowNotifications(!showNotifications);
+                  setShowSettings(false);
                   playSound('click');
                 }}
                 onMouseEnter={() => playSound('hover')}
                 className={`p-2 rounded-lg transition-all duration-300 relative ${
-                  showNotifications 
-                    ? 'text-blue-400 bg-blue-500/20 hover:text-blue-300 hover:bg-blue-500/30' 
+                  showNotifications
+                    ? 'text-blue-400 bg-blue-500/20 hover:text-blue-300 hover:bg-blue-500/30'
                     : 'text-gray-400 hover:text-white hover:bg-gray-800'
                 }`}
               >
                 <Bell size={20} />
                 {notifications && notifications.length > 0 && (
-                  <motion.span 
+                  <motion.span
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: "spring", stiffness: 500 }}
@@ -722,7 +888,26 @@ const Navigation = () => {
                   />
                 )}
               </motion.button>
-              
+
+              {/* Settings button */}
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => {
+                  setShowSettings(!showSettings);
+                  setShowNotifications(false);
+                  playSound('click');
+                }}
+                onMouseEnter={() => playSound('hover')}
+                className={`p-2 rounded-lg transition-all duration-300 ${
+                  showSettings
+                    ? 'text-purple-400 bg-purple-500/20 hover:text-purple-300 hover:bg-purple-500/30'
+                    : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                }`}
+              >
+                <Settings size={20} />
+              </motion.button>
+
               {/* Logout button - hidden during actual picking */}
               {!pickingData && (
                 <motion.button
@@ -781,77 +966,6 @@ const Navigation = () => {
                 >
                   <X size={14} />
                 </button>
-              </div>
-            </motion.div>
-          )}
-
-          {/* XP Bar - Hidden on Dashboard */}
-          {user && location.pathname !== '/dashboard' && (
-            <motion.div 
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="pb-3"
-            >
-              <div className="flex items-center justify-between text-xs font-medium mb-1">
-                <motion.span 
-                  className="text-gray-500"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  key={user?.level}
-                >
-                  Level {user?.level}
-                </motion.span>
-                <motion.span 
-                  className="text-gray-500"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  key={`${user?.xp}-${user?.xpToNextLevel}`}
-                >
-                  {user?.xp} / {user?.xpToNextLevel} XP
-                </motion.span>
-              </div>
-              <div className="w-full bg-gray-800 rounded-full h-2 overflow-hidden relative">
-                <motion.div
-                  key={user?.xp}
-                  initial={{ width: 0 }}
-                  animate={{ 
-                    width: `${(user?.xp / user?.xpToNextLevel) * 100}%`,
-                    scale: [1, 1.02, 1]
-                  }}
-                  transition={{ 
-                    width: { duration: 1.5, ease: "easeOut" },
-                    scale: { duration: 0.8, ease: "easeInOut" }
-                  }}
-                  className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 relative shadow-md"
-                  style={{
-                    filter: 'drop-shadow(0 0 8px rgba(59, 130, 246, 0.6))'
-                  }}
-                >
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                    animate={{ x: ['-100%', '200%'] }}
-                    transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
-                  />
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400 opacity-50"
-                    animate={{ 
-                      opacity: [0.5, 0.8, 0.5],
-                      scale: [1, 1.01, 1]
-                    }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                  />
-                </motion.div>
-                
-                {/* XP Gain Animation Overlay */}
-                <motion.div
-                  key={`xp-pulse-${user?.xp}`}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: [0, 1, 0], scale: [0.8, 1.2, 1] }}
-                  transition={{ duration: 1, ease: "easeOut" }}
-                  className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 via-green-400/20 to-blue-400/20 rounded-full"
-                  style={{ pointerEvents: 'none' }}
-                />
               </div>
             </motion.div>
           )}
@@ -922,9 +1036,12 @@ const Navigation = () => {
       
       {/* Search Modal */}
       <SearchModal isOpen={showSearch} onClose={() => setShowSearch(false)} />
-      
+
       {/* Notifications Panel */}
       <NotificationsPanel isOpen={showNotifications} onClose={() => setShowNotifications(false)} />
+
+      {/* Settings Panel */}
+      <SettingsPanel isOpen={showSettings} onClose={() => setShowSettings(false)} />
     </>
   );
 };

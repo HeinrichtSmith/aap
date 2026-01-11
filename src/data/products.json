@@ -143,6 +143,402 @@
       "reorderPoint": 50,
       "reorderQuantity": 200,
       "supplier": "TechSense Ltd"
+    },
+    {
+      "sku": "ARM-SENS-002",
+      "name": "PIR Motion Detector",
+      "description": "Advanced passive infrared motion detector with pet immunity up to 40kg",
+      "category": "Sensors",
+      "price": 52.00,
+      "weight": 0.18,
+      "dimensions": {
+        "length": 11,
+        "width": 9,
+        "height": 5.5
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=PIR+Detector",
+      "barcode": "9421001234567",
+      "reorderPoint": 40,
+      "reorderQuantity": 150,
+      "supplier": "TechSense Ltd"
+    },
+    {
+      "sku": "ARM-DOOR-005",
+      "name": "Magnetic Door Contact",
+      "description": "Wireless door/window contact sensor with tamper detection",
+      "category": "Sensors",
+      "price": 38.00,
+      "weight": 0.09,
+      "dimensions": {
+        "length": 8.5,
+        "width": 3.5,
+        "height": 2.2
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Door+Contact",
+      "barcode": "9421001234568",
+      "reorderPoint": 100,
+      "reorderQuantity": 500,
+      "supplier": "TechSense Ltd"
+    },
+    {
+      "sku": "ARM-CAM-008",
+      "name": "Dome Security Camera",
+      "description": "720p dome camera with pan/tilt and night vision",
+      "category": "Cameras",
+      "price": 189.00,
+      "weight": 0.75,
+      "dimensions": {
+        "length": 14,
+        "width": 14,
+        "height": 12
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Dome+Camera",
+      "barcode": "9421001234569",
+      "reorderPoint": 20,
+      "reorderQuantity": 60,
+      "supplier": "VisionTech Ltd"
+    },
+    {
+      "sku": "ARM-CAM-009",
+      "name": "PTZ Security Camera",
+      "description": "1080p PTZ camera with 10x optical zoom and auto-tracking",
+      "category": "Cameras",
+      "price": 450.00,
+      "weight": 1.2,
+      "dimensions": {
+        "length": 18,
+        "width": 16,
+        "height": 16
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=PTZ+Camera",
+      "barcode": "9421001234570",
+      "reorderPoint": 10,
+      "reorderQuantity": 30,
+      "supplier": "VisionTech Ltd"
+    },
+    {
+      "sku": "ARM-CTRL-010",
+      "name": "Smart Control Panel",
+      "description": "Touchscreen-enabled control panel with mobile app integration",
+      "category": "Control Panels",
+      "price": 580.00,
+      "weight": 3.0,
+      "dimensions": {
+        "length": 32,
+        "width": 28,
+        "height": 9
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Smart+Panel",
+      "barcode": "9421001234571",
+      "reorderPoint": 8,
+      "reorderQuantity": 20,
+      "supplier": "Arrowhead Manufacturing"
+    },
+    {
+      "sku": "ARM-KEY-011",
+      "name": "LCD Keypad",
+      "description": "Backlit LCD keypad with proximity card reader and PIN entry",
+      "category": "Keypads",
+      "price": 210.00,
+      "weight": 0.6,
+      "dimensions": {
+        "length": 16,
+        "width": 13,
+        "height": 3.5
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=LCD+Keypad",
+      "barcode": "9421001234572",
+      "reorderPoint": 25,
+      "reorderQuantity": 80,
+      "supplier": "Interface Solutions"
+    },
+    {
+      "sku": "ARM-KEY-012",
+      "name": "Proximity Reader",
+      "description": "125kHz RFID proximity card reader with LED indicators",
+      "category": "Keypads",
+      "price": 145.00,
+      "weight": 0.4,
+      "dimensions": {
+        "length": 12,
+        "width": 10,
+        "height": 2.5
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Prox+Reader",
+      "barcode": "9421001234573",
+      "reorderPoint": 30,
+      "reorderQuantity": 100,
+      "supplier": "Interface Solutions"
+    },
+    {
+      "sku": "ARM-SIREN-013",
+      "name": "Indoor Siren",
+      "description": "High-decibel indoor siren with multiple tone options",
+      "category": "Sirens",
+      "price": 89.00,
+      "weight": 0.6,
+      "dimensions": {
+        "length": 18,
+        "width": 15,
+        "height": 12
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Indoor+Siren",
+      "barcode": "9421001234574",
+      "reorderPoint": 15,
+      "reorderQuantity": 40,
+      "supplier": "SoundAlert Inc"
+    },
+    {
+      "sku": "ARM-SMOKE-014",
+      "name": "Photoelectric Smoke Detector",
+      "description": "Wireless photoelectric smoke detector with 10-year battery",
+      "category": "Life Safety",
+      "price": 72.00,
+      "weight": 0.22,
+      "dimensions": {
+        "length": 13,
+        "width": 13,
+        "height": 5.5
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Smoke+Detector",
+      "barcode": "9421001234575",
+      "reorderPoint": 35,
+      "reorderQuantity": 120,
+      "supplier": "SafetyFirst Corp"
+    },
+    {
+      "sku": "ARM-PANIC-015",
+      "name": "Emergency Panic Button",
+      "description": "Wall-mounted emergency panic button with LED status indicator",
+      "category": "Accessories",
+      "price": 68.00,
+      "weight": 0.12,
+      "dimensions": {
+        "length": 8,
+        "width": 8,
+        "height": 3
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Emergency+Panic",
+      "barcode": "9421001234576",
+      "reorderPoint": 30,
+      "reorderQuantity": 80,
+      "supplier": "TechSense Ltd"
+    },
+    {
+      "sku": "NET-SW-016",
+      "name": "Network Switch 8-Port",
+      "description": "8-port Gigabit network switch with PoE support",
+      "category": "Network",
+      "price": 120.00,
+      "weight": 0.8,
+      "dimensions": {
+        "length": 18,
+        "width": 12,
+        "height": 4
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Net+Switch",
+      "barcode": "9422001234567",
+      "reorderPoint": 10,
+      "reorderQuantity": 30,
+      "supplier": "NetConnect Solutions"
+    },
+    {
+      "sku": "NET-SW-017",
+      "name": "PoE Network Switch",
+      "description": "5-port PoE network switch for camera systems",
+      "category": "Network",
+      "price": 165.00,
+      "weight": 0.9,
+      "dimensions": {
+        "length": 17,
+        "width": 11,
+        "height": 4.5
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=PoE+Switch",
+      "barcode": "9422001234568",
+      "reorderPoint": 8,
+      "reorderQuantity": 25,
+      "supplier": "NetConnect Solutions"
+    },
+    {
+      "sku": "ACC-KIT-018",
+      "name": "Touch Kit Interface",
+      "description": "Touchscreen interface kit with mounting hardware",
+      "category": "Accessories",
+      "price": 95.00,
+      "weight": 0.5,
+      "dimensions": {
+        "length": 20,
+        "width": 15,
+        "height": 6
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Touch+Kit",
+      "barcode": "9423001234567",
+      "reorderPoint": 20,
+      "reorderQuantity": 50,
+      "supplier": "AccessPro Ltd"
+    },
+    {
+      "sku": "ACC-KIT-019",
+      "name": "Installation Kit",
+      "description": "Complete installation toolkit with screws and fasteners",
+      "category": "Accessories",
+      "price": 78.00,
+      "weight": 0.8,
+      "dimensions": {
+        "length": 25,
+        "width": 18,
+        "height": 8
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Install+Kit",
+      "barcode": "9423001234568",
+      "reorderPoint": 25,
+      "reorderQuantity": 60,
+      "supplier": "AccessPro Ltd"
+    },
+    {
+      "sku": "BAT-UPS-020",
+      "name": "Backup Battery 12V",
+      "description": "12V 7Ah sealed lead-acid backup battery",
+      "category": "Power",
+      "price": 85.00,
+      "weight": 2.5,
+      "dimensions": {
+        "length": 15,
+        "width": 6.5,
+        "height": 10
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=12V+Battery",
+      "barcode": "9424001234567",
+      "reorderPoint": 15,
+      "reorderQuantity": 40,
+      "supplier": "PowerTech Solutions"
+    },
+    {
+      "sku": "BAT-UPS-021",
+      "name": "UPS Power Supply",
+      "description": "Uninterruptible power supply unit with battery backup",
+      "category": "Power",
+      "price": 195.00,
+      "weight": 3.5,
+      "dimensions": {
+        "length": 22,
+        "width": 18,
+        "height": 10
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=UPS+Unit",
+      "barcode": "9424001234568",
+      "reorderPoint": 8,
+      "reorderQuantity": 20,
+      "supplier": "PowerTech Solutions"
+    },
+    {
+      "sku": "CBL-CAT6-022",
+      "name": "CAT6 Cable 100m",
+      "description": "Cat6 network cable 100m reel, UTP",
+      "category": "Cables",
+      "price": 125.00,
+      "weight": 4.0,
+      "dimensions": {
+        "length": 30,
+        "width": 30,
+        "height": 15
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=CAT6+Cable",
+      "barcode": "9425001234567",
+      "reorderPoint": 10,
+      "reorderQuantity": 25,
+      "supplier": "CableTech Ltd"
+    },
+    {
+      "sku": "CBL-PWR-023",
+      "name": "Power Cable 20m",
+      "description": "20m power cable with DC connectors",
+      "category": "Cables",
+      "price": 45.00,
+      "weight": 0.8,
+      "dimensions": {
+        "length": 25,
+        "width": 20,
+        "height": 8
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Power+Cable",
+      "barcode": "9425001234568",
+      "reorderPoint": 30,
+      "reorderQuantity": 75,
+      "supplier": "CableTech Ltd"
+    },
+    {
+      "sku": "MNT-BRK-024",
+      "name": "Wall Mount Bracket",
+      "description": "Adjustable wall mount bracket for security cameras",
+      "category": "Mounting",
+      "price": 25.00,
+      "weight": 0.4,
+      "dimensions": {
+        "length": 12,
+        "width": 8,
+        "height": 4
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Wall+Mount",
+      "barcode": "9426001234567",
+      "reorderPoint": 40,
+      "reorderQuantity": 100,
+      "supplier": "MountPro Ltd"
+    },
+    {
+      "sku": "MNT-BRK-025",
+      "name": "Ceiling Mount Bracket",
+      "description": "Ceiling mount bracket for dome cameras and sensors",
+      "category": "Mounting",
+      "price": 28.00,
+      "weight": 0.35,
+      "dimensions": {
+        "length": 10,
+        "width": 10,
+        "height": 3.5
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Ceiling+Mount",
+      "barcode": "9426001234568",
+      "reorderPoint": 35,
+      "reorderQuantity": 80,
+      "supplier": "MountPro Ltd"
+    },
+    {
+      "sku": "SIG-AMP-026",
+      "name": "Signal Amplifier",
+      "description": "Signal amplifier for extended range wireless devices",
+      "category": "Accessories",
+      "price": 135.00,
+      "weight": 0.6,
+      "dimensions": {
+        "length": 14,
+        "width": 10,
+        "height": 5
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Signal+Amp",
+      "barcode": "9427001234567",
+      "reorderPoint": 12,
+      "reorderQuantity": 30,
+      "supplier": "SignalBoost Inc"
+    },
+    {
+      "sku": "PWR-SUP-027",
+      "name": "Power Supply 12V 5A",
+      "description": "12V 5A regulated power supply with overload protection",
+      "category": "Power",
+      "price": 75.00,
+      "weight": 0.9,
+      "dimensions": {
+        "length": 15,
+        "width": 10,
+        "height": 5
+      },
+      "image": "https://via.placeholder.com/300x300/3b82f6/ffffff?text=Power+Supply",
+      "barcode": "9428001234567",
+      "reorderPoint": 20,
+      "reorderQuantity": 50,
+      "supplier": "PowerTech Solutions"
     }
   ]
 }

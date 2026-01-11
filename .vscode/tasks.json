@@ -2,33 +2,94 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Monitor Cursor Instructions",
-      "type": "shell",
-      "command": "${workspaceFolder}/cursor-auto-opener.sh",
+      "label": "Start Frontend (Vite)",
+      "type": "npm",
+      "script": "dev:frontend",
+      "path": ".",
+      "problemMatcher": [],
+      "isBackground": true,
       "presentation": {
-        "echo": true,
         "reveal": "always",
-        "focus": false,
-        "panel": "dedicated",
-        "showReuseMessage": false
+        "panel": "new",
+        "echo": true,
+        "showReuseMessage": true,
+        "clear": true
       },
-      "runOptions": {
-        "runOn": "folderOpen"
-      },
-      "problemMatcher": []
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      }
     },
     {
-      "label": "Start Bridge System",
-      "type": "shell",
-      "command": "bash",
-      "args": ["${workspaceFolder}/start-bridge-with-notifier.sh"],
+      "label": "Start Backend API",
+      "type": "npm",
+      "script": "dev:backend",
+      "path": ".",
+      "problemMatcher": [],
+      "isBackground": true,
       "presentation": {
-        "echo": true,
         "reveal": "always",
-        "focus": true,
-        "panel": "new"
+        "panel": "new",
+        "echo": true,
+        "showReuseMessage": true,
+        "clear": true
       },
-      "problemMatcher": []
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      }
+    },
+    {
+      "label": "Start Full Stack (Recommended)",
+      "type": "npm",
+      "script": "dev:all",
+      "path": ".",
+      "problemMatcher": [],
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "echo": true,
+        "showReuseMessage": true,
+        "clear": true
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Start Full Stack (Safe Mode)",
+      "type": "npm",
+      "script": "start:safe",
+      "path": ".",
+      "problemMatcher": [],
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "echo": true,
+        "showReuseMessage": true,
+        "clear": true
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      }
+    },
+    {
+      "label": "Pre-flight Check",
+      "type": "npm",
+      "script": "preflight",
+      "path": ".",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "echo": true,
+        "showReuseMessage": true,
+        "clear": true
+      }
     }
   ]
 }

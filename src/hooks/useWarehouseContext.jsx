@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { playSound as utilsPlaySound } from '../utils/audio';
-import { initialOrders } from '../data/pickingData';
+import api from '../services/api';
 
 const WarehouseContext = createContext();
 
@@ -22,30 +22,86 @@ export const WarehouseProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [pickedOrders, setPickedOrders] = useState([]);
   const [packedOrders, setPackedOrders] = useState([]);
-  const [availablePickingOrders, setAvailablePickingOrders] = useState(initialOrders);
+  const [availablePickingOrders, setAvailablePickingOrders] = useState([]);
+
+  // Load available orders from API when user is logged in
+  useEffect(() => {
+    if (!user) return;
+    
+    const loadOrders = async () => {
+      try {
+        const orders = await api.orders.getAvailable();
+        setAvailablePickingOrders(orders);
+      } catch (error) {
+        console.error('Failed to load orders:', error);
+        setAvailablePickingOrders([]);
+      }
+    };
+    
+    loadOrders();
+  }, [user]);
+
+  // Load picked orders from API (backend is single source of truth)
+  useEffect(() => {
+    if (!user) return;
+    
+    const loadPickedOrders = async () => {
+      try {
+        const orders = await api.orders.getByStatus('READY_TO_PACK');
+        setPickedOrders(orders);
+      } catch (error) {
+        console.error('Failed to load picked orders:', error);
+        setPickedOrders([]);
+      }
+    };
+    
+    loadPickedOrders();
+  }, [user]);
+
+  // Load packed orders from API (backend is single source of truth)
+  useEffect(() => {
+    if (!user) return;
+    
+    const loadPackedOrders = async () => {
+      try {
+        const orders = await api.orders.getByStatus('PACKED');
+        setPackedOrders(orders);
+      } catch (error) {
+        console.error('Failed to load packed orders:', error);
+        setPackedOrders([]);
+      }
+    };
+    
+    loadPackedOrders();
+  }, [user]);
 
   // Load user from localStorage on mount
   useEffect(() => {
-    const savedUser = localStorage.getItem('currentUser');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
+    try {
+      const savedUser = localStorage.getItem('currentUser');
+      if (savedUser && savedUser !== 'undefined') {
+        setUser(JSON.parse(savedUser));
+      }
+    } catch (error) {
+      console.error('Error loading user from localStorage:', error);
+      // Clear corrupted data
+      localStorage.removeItem('currentUser');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
   // Auth functions
   const login = async (email, password) => {
     try {
-      const usersData = await import('../data/users.json');
-      const foundUser = usersData.users.find(
-        u => u.email === email && u.password === password
-      );
-
-      if (foundUser) {
-        setUser(foundUser);
-        localStorage.setItem('currentUser', JSON.stringify(foundUser));
+      // Use backend API for login
+      const response = await api.auth.login(email, password);
+      
+      if (response.user) {
+        setUser(response.user);
+        localStorage.setItem('currentUser', JSON.stringify(response.user));
         utilsPlaySound('success');
-        toast.success(`Welcome back, ${foundUser.name}!`);
+        toast.success(`Welcome back, ${response.user.name}!`);
         navigate('/dashboard');
         return true;
       } else {
@@ -55,61 +111,17 @@ export const WarehouseProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Login error:', error);
-      toast.error('Login failed');
+      utilsPlaySound('error');
+      toast.error('Login failed: ' + (error.message || 'Unknown error'));
       return false;
     }
   };
 
   const logout = () => {
+    api.auth.logout();
     setUser(null);
-    localStorage.removeItem('currentUser');
     navigate('/login');
     toast.success('Logged out successfully');
-  };
-
-  // XP and Level Management
-  const addXP = (amount, reason) => {
-    if (!user) return;
-
-    const newXP = user.xp + amount;
-    const newUser = { ...user, xp: newXP };
-
-    // Check for level up
-    if (newXP >= user.xpToNextLevel) {
-      newUser.level += 1;
-      newUser.xp = newXP - user.xpToNextLevel;
-      newUser.xpToNextLevel = calculateXPForNextLevel(newUser.level);
-      
-      utilsPlaySound('complete');
-      toast.success(
-        <div className="flex items-center space-x-2">
-          <span className="text-2xl">🎉</span>
-          <div>
-            <p className="font-bold">Level Up!</p>
-            <p className="text-sm">You're now Level {newUser.level}</p>
-          </div>
-        </div>,
-        { duration: 5000 }
-      );
-    } else {
-      toast.success(
-        <div className="flex items-center space-x-2">
-          <span className="text-xl">✨</span>
-          <div>
-            <p className="font-bold">+{amount} XP</p>
-            <p className="text-sm">{reason}</p>
-          </div>
-        </div>,
-        { duration: 2000 }
-      );
-    }
-
-    setUser(newUser);
-    localStorage.setItem('currentUser', JSON.stringify(newUser));
-  };
-
-  const calculateXPForNextLevel = (level) => {
-    return Math.floor(1000 * Math.pow(1.5, level - 1));
   };
 
   // Achievement Management
@@ -136,13 +148,10 @@ export const WarehouseProvider = ({ children }) => {
             <div>
               <p className="font-bold">Achievement Unlocked!</p>
               <p className="text-sm">{achievement.name}</p>
-              <p className="text-xs text-primary">+{achievement.xpReward} XP</p>
             </div>
           </div>,
           { duration: 5000 }
         );
-
-        addXP(achievement.xpReward, `Achievement: ${achievement.name}`);
       }
     } catch (error) {
       console.error('Achievement unlock error:', error);
@@ -176,6 +185,24 @@ export const WarehouseProvider = ({ children }) => {
     localStorage.setItem('currentUser', JSON.stringify(newUser));
   };
 
+  // Persist picked orders to localStorage
+  const persistPickedOrders = (orders) => {
+    setPickedOrders(orders);
+    localStorage.setItem('warehouse_pickedOrders', JSON.stringify(orders));
+  };
+
+  // Persist packed orders to localStorage
+  const persistPackedOrders = (orders) => {
+    setPackedOrders(orders);
+    localStorage.setItem('warehouse_packedOrders', JSON.stringify(orders));
+  };
+
+  // Persist available orders to localStorage
+  const persistAvailableOrders = (orders) => {
+    setAvailablePickingOrders(orders);
+    localStorage.setItem('warehouse_availableOrders', JSON.stringify(orders));
+  };
+
   const value = {
     user,
     loading,
@@ -183,14 +210,13 @@ export const WarehouseProvider = ({ children }) => {
     activeOrder,
     setActiveOrder,
     pickedOrders,
-    setPickedOrders,
+    setPickedOrders: persistPickedOrders,
     packedOrders,
-    setPackedOrders,
+    setPackedOrders: persistPackedOrders,
     availablePickingOrders,
-    setAvailablePickingOrders,
+    setAvailablePickingOrders: persistAvailableOrders,
     login,
     logout,
-    addXP,
     playSound: utilsPlaySound,
     unlockAchievement,
     addNotification,

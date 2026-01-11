@@ -8,8 +8,7 @@ import {
   Plus, 
   Navigation,
   Edit3,
-  X,
-  Hash
+  X
 } from 'lucide-react';
 import ProgressRing from '../ProgressRing';
 import GameIcon from '../GameIcon';
@@ -305,14 +304,6 @@ const OptimizedPackingItem = memo(({
           )}
         </AnimatePresence>
         
-        {/* SKU badge for minimized */}
-        <div className="absolute top-1 right-1 bg-gradient-to-r from-purple-500/20 to-pink-500/20 px-4 py-2 rounded-lg border border-purple-500/30">
-          <span className="text-purple-300 font-bold flex items-center text-2xl">
-            <Hash className="mr-1" size={20} />
-            {item.id}
-          </span>
-        </div>
-
         {/* Minus button - Bottom Left for minimized */}
         {scannedCount > 0 && editingQuantity !== item.id && (
           <div className="absolute bottom-1 left-1 z-30">
@@ -385,10 +376,6 @@ const OptimizedPackingItem = memo(({
                 {item.name}
               </p>
             </div>
-            <p className="text-2xl text-purple-400 flex items-center justify-center mt-2">
-              <Barcode className="mr-2" size={28} />
-              {item.id}
-            </p>
           </div>
           
           <div className="flex items-center justify-center mb-2">
@@ -424,9 +411,8 @@ const OptimizedPackingItem = memo(({
                   onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
-                    // Clear the field if starting from 0, otherwise use current count
                     onTempQuantityChange(scannedCount === 0 ? '' : scannedCount.toString());
-                    onEditQuantity(item.id, undefined); // Start editing
+                    onEditQuantity(item.id, undefined);
                   }}
                   title="Click to edit quantity"
                 />
@@ -435,7 +421,6 @@ const OptimizedPackingItem = memo(({
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
                 <div className="text-center no-card-click">
                   {editingQuantity === item.id ? (
-                    // Edit mode - show only the input number
                     <input
                       type="number"
                       min="0"
@@ -444,7 +429,6 @@ const OptimizedPackingItem = memo(({
                       onChange={(e) => {
                         const value = e.target.value;
                         const numValue = parseInt(value) || 0;
-                        // Only allow values up to item.quantity
                         if (value === '' || (numValue >= 0 && numValue <= item.quantity)) {
                           onTempQuantityChange(value);
                         }
@@ -454,7 +438,7 @@ const OptimizedPackingItem = memo(({
                         if (newValue >= 0 && newValue <= item.quantity) {
                           onEditQuantity(item.id, newValue);
                         } else {
-                          onEditQuantity(item.id, undefined); // Cancel edit
+                          onEditQuantity(item.id, undefined);
                         }
                       }}
                       onKeyDown={(e) => {
@@ -463,10 +447,10 @@ const OptimizedPackingItem = memo(({
                           if (newValue >= 0 && newValue <= item.quantity) {
                             onEditQuantity(item.id, newValue);
                           } else {
-                            onEditQuantity(item.id, undefined); // Cancel edit
+                            onEditQuantity(item.id, undefined);
                           }
                         } else if (e.key === 'Escape') {
-                          onEditQuantity(item.id, undefined); // Cancel edit
+                          onEditQuantity(item.id, undefined);
                         }
                       }}
                       onClick={(e) => {
@@ -489,15 +473,13 @@ const OptimizedPackingItem = memo(({
                       placeholder="0"
                     />
                   ) : (
-                    // Display mode - show checkmark or quantity
                     <div 
                       className="flex items-center justify-center cursor-pointer pointer-events-auto"
                       onClick={(e) => {
                         e.stopPropagation();
                         e.preventDefault();
-                        // Clear the field if starting from 0, otherwise use current count
                         onTempQuantityChange(scannedCount === 0 ? '' : scannedCount.toString());
-                        onEditQuantity(item.id, undefined); // Start editing
+                        onEditQuantity(item.id, undefined);
                       }}
                       title="Click to edit quantity"
                     >
@@ -516,7 +498,6 @@ const OptimizedPackingItem = memo(({
                   )}
                 </div>
               </div>
-              
             </div>
           </div>
           
@@ -922,13 +903,15 @@ const OptimizedPackingItem = memo(({
                 </p>
               </div>
             </div>
+          </div>
+          <div className="flex flex-col items-center justify-center">
             <p className="text-5xl text-purple-400 flex items-center justify-center mb-6">
               <Barcode className="mr-4" size={48} />
               {item.id}
             </p>
           </div>
         </div>
-        
+
         <div className="flex items-center justify-center relative mb-4">
           <div className="relative group">
             <ProgressRing 
@@ -940,6 +923,7 @@ const OptimizedPackingItem = memo(({
               strokeWidth={10}
               strokeColor={sectionId === 'packedItems' ? '#9333ea' : undefined}
             />
+              
               {/* Edit icon indicator when in edit mode */}
               {editingQuantity === item.id && (
                 <div className="absolute -top-1 -right-1 z-10">
@@ -961,9 +945,8 @@ const OptimizedPackingItem = memo(({
                   onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
-                    // Clear the field if starting from 0, otherwise use current count
                     onTempQuantityChange(scannedCount === 0 ? '' : scannedCount.toString());
-                    onEditQuantity(item.id, undefined); // Start editing
+                    onEditQuantity(item.id, undefined);
                   }}
                   title="Click to edit quantity"
                 />
@@ -972,7 +955,6 @@ const OptimizedPackingItem = memo(({
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
                 <div className="text-center no-card-click">
                   {editingQuantity === item.id ? (
-                    // Edit mode - show only the input number
                     <input
                       type="number"
                       min="0"
@@ -981,7 +963,6 @@ const OptimizedPackingItem = memo(({
                       onChange={(e) => {
                         const value = e.target.value;
                         const numValue = parseInt(value) || 0;
-                        // Only allow values up to item.quantity
                         if (value === '' || (numValue >= 0 && numValue <= item.quantity)) {
                           onTempQuantityChange(value);
                         }
@@ -991,7 +972,7 @@ const OptimizedPackingItem = memo(({
                         if (newValue >= 0 && newValue <= item.quantity) {
                           onEditQuantity(item.id, newValue);
                         } else {
-                          onEditQuantity(item.id, undefined); // Cancel edit
+                          onEditQuantity(item.id, undefined);
                         }
                       }}
                       onKeyDown={(e) => {
@@ -1000,10 +981,10 @@ const OptimizedPackingItem = memo(({
                           if (newValue >= 0 && newValue <= item.quantity) {
                             onEditQuantity(item.id, newValue);
                           } else {
-                            onEditQuantity(item.id, undefined); // Cancel edit
+                            onEditQuantity(item.id, undefined);
                           }
                         } else if (e.key === 'Escape') {
-                          onEditQuantity(item.id, undefined); // Cancel edit
+                          onEditQuantity(item.id, undefined);
                         }
                       }}
                       onClick={(e) => {
@@ -1026,15 +1007,13 @@ const OptimizedPackingItem = memo(({
                       placeholder="0"
                     />
                   ) : (
-                    // Display mode - show checkmark when fully scanned, otherwise X/Y format
                     <div 
                       className="flex items-center justify-center cursor-pointer pointer-events-auto"
                       onClick={(e) => {
                         e.stopPropagation();
                         e.preventDefault();
-                        // Clear the field if starting from 0, otherwise use current count
                         onTempQuantityChange(scannedCount === 0 ? '' : scannedCount.toString());
-                        onEditQuantity(item.id, undefined); // Start editing
+                        onEditQuantity(item.id, undefined);
                       }}
                       title="Click to edit quantity"
                     >
@@ -1058,7 +1037,7 @@ const OptimizedPackingItem = memo(({
                           )}
                           <span className={`text-3xl font-bold ${
                             isPartiallyScanned ? 'text-yellow-400' : 
-                            'text-white'
+                              'text-white'
                           }`}>
                             /{item.quantity}
                           </span>
@@ -1068,9 +1047,8 @@ const OptimizedPackingItem = memo(({
                   )}
                 </div>
               </div>
-              
             </div>
-        </div>
+          </div>
 
         {/* ENTER button - centered below circle when editing */}
         {editingQuantity === item.id && (

@@ -2,7 +2,6 @@ import React from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Package } from 'lucide-react';
 import { useWarehouse } from '../hooks/useWarehouseContext';
-import XPProgressBar from './XPProgressBar';
 import AnimatedBackground from './AnimatedBackground';
 import ChatWidget from './chat/ChatWidget';
 
@@ -32,28 +31,16 @@ const Layout = () => {
           <div className="max-w-7xl mx-auto">
             <div className="flex items-center justify-center mb-4">
               {/* Logo and Brand - centered */}
-              <button 
+              <button
                 onClick={handleLogoClick}
                 className="flex flex-col items-center space-y-3 hover:opacity-80 transition-opacity duration-200 cursor-pointer"
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center mb-2">
-                  <Package size={24} />
-                </div>
                 <div className="text-center">
-                  <h1 className="text-xl font-bold text-white">Arrowhead Polaris</h1>
+                  <h1 className="text-xl font-bold text-white">OpsUI</h1>
                   <p className="text-xs text-gray-400">v6.0</p>
                 </div>
               </button>
             </div>
-
-            {/* XP Progress Bar - Hidden on Dashboard */}
-            {location.pathname !== '/dashboard' && (
-              <XPProgressBar 
-                current={user?.xp || 0} 
-                max={user?.xpToNextLevel || 1000} 
-                level={user?.level || 1} 
-              />
-            )}
           </div>
         </div>
 

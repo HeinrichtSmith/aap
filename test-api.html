@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WMS API Test Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header p { opacity: 0.9; }
+        .login-section {
+            padding: 40px;
+            text-align: center;
+            background: #f8f9fa;
+        }
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        input {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        input:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover { transform: translateY(-2px); }
+        button:active { transform: translateY(0); }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 40px;
+            background: #f8f9fa;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .stat-card h3 {
+            font-size: 2.5em;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        .stat-card p { color: #666; }
+        .orders-section {
+            padding: 40px;
+        }
+        .order-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .order-header {
+            padding: 20px;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .order-info h3 { margin-bottom: 5px; color: #333; }
+        .order-info p { color: #666; font-size: 0.9em; }
+        .order-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .status-URGENT { background: #fee; color: #c33; }
+        .status-NORMAL { background: #eef; color: #66a; }
+        .status-LOW { background: #efe; color: #3a3; }
+        .status-PENDING { background: #ffc; color: #960; }
+        .status-PICKING { background: #cdf; color: #369; }
+        .status-PACKED { background: #cfc; color: #393; }
+        .order-body {
+            padding: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+        .order-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .order-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+        }
+        .order-item strong { display: block; margin-bottom: 5px; }
+        .order-item span { color: #666; font-size: 0.9em; }
+        #loading {
+            text-align: center;
+            padding: 60px;
+            color: #666;
+        }
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .success {
+            background: #cfc;
+            color: #393;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏭 WMS API Test Dashboard</h1>
+            <p>Verify orders are accessible via API</p>
+        </div>
+
+        <div id="loginSection" class="login-section">
+            <h2 style="margin-bottom: 20px;">Login to Access Orders</h2>
+            <div class="login-form">
+                <input type="email" id="email" value="admin@arrowhead.co.nz" placeholder="Email">
+                <input type="password" id="password" value="password123" placeholder="Password">
+                <button onclick="login()">Login</button>
+            </div>
+        </div>
+
+        <div id="dashboard" style="display: none;">
+            <div class="stats">
+                <div class="stat-card">
+                    <h3 id="totalOrders">0</h3>
+                    <p>Total Orders</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="urgentOrders">0</h3>
+                    <p>Urgent Orders</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="pendingOrders">0</h3>
+                    <p>Pending Orders</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="pickingOrders">0</h3>
+                    <p>In Progress</p>
+                </div>
+            </div>
+
+            <div class="orders-section">
+                <h2 style="margin-bottom: 20px;">📋 Orders</h2>
+                <div id="ordersList">
+                    <div id="loading">Loading orders...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let authToken = localStorage.getItem('wms_test_token');
+
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('http://localhost:3001/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    authToken = data.token;
+                    localStorage.setItem('wms_test_token', authToken);
+                    document.getElementById('loginSection').style.display = 'none';
+                    document.getElementById('dashboard').style.display = 'block';
+                    loadOrders();
+                } else {
+                    alert('Login failed: ' + (data.message || 'Unknown error'));
+                }
+            } catch (error) {
+                alert('Login error: ' + error.message);
+            }
+        }
+
+        async function loadOrders() {
+            if (!authToken) {
+                alert('Please login first');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3001/api/orders', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayOrders(data.orders);
+                } else {
+                    document.getElementById('ordersList').innerHTML = 
+                        `<div class="error">Failed to load orders: ${data.message || 'Unknown error'}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('ordersList').innerHTML = 
+                    `<div class="error">Error loading orders: ${error.message}</div>`;
+            }
+        }
+
+        function displayOrders(orders) {
+            const stats = {
+                total: orders.length,
+                urgent: orders.filter(o => o.priority === 'URGENT').length,
+                pending: orders.filter(o => o.status === 'PENDING').length,
+                picking: orders.filter(o => o.status === 'PICKING').length
+            };
+
+            document.getElementById('totalOrders').textContent = stats.total;
+            document.getElementById('urgentOrders').textContent = stats.urgent;
+            document.getElementById('pendingOrders').textContent = stats.pending;
+            document.getElementById('pickingOrders').textContent = stats.picking;
+
+            const ordersHtml = orders.map(order => `
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-info">
+                            <h3>${order.customerName}</h3>
+                            <p>📍 ${order.shippingAddress.city}, ${order.shippingAddress.country} | 
+                               📧 ${order.customerEmail} | ☎ ${order.customerPhone}</p>
+                        </div>
+                        <div>
+                            <span class="order-status status-${order.priority}">${order.priority}</span>
+                            <span class="order-status status-${order.status}">${order.status}</span>
+                        </div>
+                    </div>
+                    <div class="order-body">
+                        <p><strong>Order ID:</strong> ${order.id.substring(0, 8)}...</p>
+                        <p><strong>Created:</strong> ${new Date(order.createdAt).toLocaleString()}</p>
+                        <div class="order-items">
+                            ${order.items.map(item => `
+                                <div class="order-item">
+                                    <strong>${item.name}</strong>
+                                    <span>SKU: ${item.sku} | Qty: ${item.quantity} | 📍 ${item.location}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('ordersList').innerHTML = ordersHtml;
+        }
+
+        // Check if already logged in
+        if (authToken) {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            loadOrders();
+        }
+    </script>
+</body>
+</html>

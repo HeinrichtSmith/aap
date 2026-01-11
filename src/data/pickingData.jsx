@@ -21,7 +21,7 @@ const transformOrdersFromJson = () => {
       items: order.items.map(item => {
         const product = productMap[item.sku] || {};
         return {
-          id: product.barcode || item.sku,
+          id: item.barcode || product.barcode || item.sku,
           name: item.name || product.name || item.sku,
           quantity: item.quantity,
           binLocation: item.location,

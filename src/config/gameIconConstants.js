@@ -27,6 +27,37 @@ export const sizeMultipliers = {
   large: 1.3
 };
 
+// Determine tier based on price/value
+export const getTierFromPrice = (price) => {
+  if (!price || price === 0) return 'standard';
+
+  if (price >= 1000) return 'cosmic';      // $1000+ = Cosmic
+  if (price >= 400) return 'mega';         // $400-$999 = Mega
+  if (price >= 100) return 'super';        // $100-$399 = Super
+  return 'standard';                       // $0-$99 = Standard
+};
+
+// Determine tier based on quantity for items without price
+export const getTierFromQuantity = (quantity) => {
+  if (!quantity) return 'standard';
+
+  if (quantity >= 100) return 'cosmic';     // 100+ items = Cosmic
+  if (quantity >= 50) return 'mega';        // 50-99 items = Mega
+  if (quantity >= 20) return 'super';       // 20-49 items = Super
+  return 'standard';                        // 1-19 items = Standard
+};
+
+// Determine tier for an item (uses price if available, otherwise quantity)
+export const getItemTier = (item) => {
+  if (item?.price !== undefined && item?.price !== null) {
+    return getTierFromPrice(item.price);
+  }
+  if (item?.quantity !== undefined && item?.quantity !== null) {
+    return getTierFromQuantity(item.quantity);
+  }
+  return 'standard';
+};
+
 // Determine tier style
 export const getTierStyle = (boxType) => {
   switch(boxType) {

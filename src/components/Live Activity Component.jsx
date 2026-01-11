@@ -1305,9 +1305,8 @@ const ConfirmationModal = ({ order, packingTime, selectedPackage, onPrintLabel, 
         setTimeout(() => addXP(comboBonus, 'Combo Bonus'), 2000);
       }
 
-      // Update stats
+      // Update stats - Note: ordersProcessed is only incremented when order is SHIPPED, not packed
       updateStats({
-        ordersProcessed: (order.stats?.ordersProcessed || 0) + 1,
         packingTime: packingTime.time,
         packagesProcessed: 1
       });

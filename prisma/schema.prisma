@@ -1,0 +1,183 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./backend/prisma/dev.db"
+}
+
+model Company {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  plan        String   @default("STARTER")
+  status      String   @default("ACTIVE")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("companies")
+}
+
+model Site {
+  id          String   @id @default(uuid())
+  companyId   String
+  code        String   @unique
+  name        String
+  address     Json?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("sites")
+}
+
+model User {
+  id             String   @id @default(uuid())
+  email          String   @unique
+  password       String
+  name           String
+  role           String
+  companyId      String
+  siteId         String?
+  level          Int      @default(1)
+  xp             Int      @default(0)
+  xpToNextLevel  Int      @default(100)
+  department     String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  stats          UserStats?
+  activities     Activity[]
+
+  @@map("users")
+}
+
+model Product {
+  id               String          @id @default(uuid())
+  companyId         String
+  siteId           String?
+  sku              String          @unique
+  name             String
+  category         String?
+  price            Float
+  weight           Float?
+  dimensions       Json?
+  barcode          String          @unique
+  reorderPoint     Int             @default(10)
+  reorderQuantity  Int             @default(50)
+  createdAt        DateTime        @default(now())
+
+  orderItems       OrderItem[]
+
+  @@map("products")
+}
+
+model Order {
+  id                  String      @id
+  customerName        String
+  customerEmail       String
+  customerPhone       String
+  status              String
+  priority            String      @default("NORMAL")
+  createdAt           DateTime    @default(now())
+  siteId              String
+  assignedPickerId     String?
+  assignedPackerId     String?
+  estimatedPickMinutes Int         @default(10)
+  shippedAt           DateTime?
+  packedAt            DateTime?
+  packageType         String?
+  trackingNumber      String?
+  courier             String?
+  shippingAddress     Json
+  notes               String?
+
+  items               OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id              String   @id @default(uuid())
+  orderId         String
+  productId       String?
+  sku             String
+  name            String
+  barcode         String?
+  quantity        Int
+  pickedQuantity  Int      @default(0)
+  packedQuantity  Int      @default(0)
+  location        String
+  order           Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product         Product? @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+model UserStats {
+  userId                   String   @id
+  user                     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ordersPicked             Int      @default(0)
+  ordersPacked             Int      @default(0)
+  ordersProcessed          Int      @default(0)
+  itemsPicked              Int      @default(0)
+  itemsPacked              Int      @default(0)
+  purchaseOrdersReceived    Int      @default(0)
+  itemsReceived            Int      @default(0)
+  accuracy                 Float    @default(0)
+  averagePickTime          Int      @default(0)
+  averagePackTime          Int      @default(0)
+  averageReceiveTime       Int      @default(0)
+  updatedAt                DateTime @updatedAt
+  createdAt               DateTime @default(now())
+
+  @@map("user_stats")
+}
+
+model InventoryItem {
+  id                 String   @id @default(uuid())
+  productId           String
+  binId               String
+  siteId              String
+  quantity            Int      @default(0)
+  quantityTotal       Int      @default(0)
+  quantityAvailable   Int      @default(0)
+  quantityReserved    Int      @default(0)
+  updatedAt           DateTime @updatedAt
+  createdAt          DateTime @default(now())
+
+  @@unique([productId, binId])
+  @@map("inventory_items")
+}
+
+model Bin {
+  id            String   @id @default(uuid())
+  companyId     String
+  code          String   @unique
+  location      String
+  aisle         String
+  row           String
+  column        String
+  capacity      Int      @default(100)
+  type          String   @default("medium")
+  isAvailable   Boolean  @default(true)
+  status        String   @default("active")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("bins")
+}
+
+model Activity {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type         String
+  entityType   String
+  entityId     String
+  description  String
+  metadata     Json?
+  createdAt    DateTime @default(now())
+
+  @@map("activities")
+}

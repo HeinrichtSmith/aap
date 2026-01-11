@@ -224,7 +224,7 @@
           "packedQuantity": 0,
           "location": "F-02-02",
           "name": "Security Camera HD",
-          "barcode": "CAM007001"
+          "barcode": "9421234567896"
         },
         {
           "sku": "ARM-PANIC-008", 
@@ -233,7 +233,7 @@
           "packedQuantity": 0,
           "location": "A-03-04",
           "name": "Panic Button",
-          "barcode": "PAN008001"
+          "barcode": "9421234567897"
         },
         {
           "sku": "ARM-SENS-001",
@@ -242,7 +242,7 @@
           "packedQuantity": 0,
           "location": "A-01-02",
           "name": "Motion Sensor",
-          "barcode": "SEN001001"
+          "barcode": "9421234567890"
         }
       ],
       "shippingAddress": {
@@ -272,7 +272,7 @@
           "packedQuantity": 0,
           "location": "A-02-05",
           "name": "Door Sensor",
-          "barcode": "DOO004001"
+          "barcode": "9421234567893"
         },
         {
           "sku": "ARM-KEY-005",
@@ -281,7 +281,7 @@
           "packedQuantity": 0,
           "location": "C-02-03",
           "name": "Key Fob",
-          "barcode": "KEY005001"
+          "barcode": "9421234567894"
         }
       ],
       "shippingAddress": {
@@ -310,7 +310,7 @@
           "packedQuantity": 0,
           "location": "F-02-02",
           "name": "Security Camera HD",
-          "barcode": "CAM007001"
+          "barcode": "9421234567896"
         },
         {
           "sku": "ARM-DOOR-004",
@@ -319,7 +319,7 @@
           "packedQuantity": 0,
           "location": "A-02-05",
           "name": "Door Sensor",
-          "barcode": "DOO004001"
+          "barcode": "9421234567893"
         },
         {
           "sku": "ARM-SENS-001",
@@ -328,7 +328,7 @@
           "packedQuantity": 0,
           "location": "A-01-02",
           "name": "Motion Sensor",
-          "barcode": "SEN001001"
+          "barcode": "9421234567890"
         },
         {
           "sku": "ARM-CTRL-003",
@@ -337,7 +337,7 @@
           "packedQuantity": 0,
           "location": "B-03-01",
           "name": "Control Panel",
-          "barcode": "CTR003001"
+          "barcode": "9421234567892"
         }
       ],
       "shippingAddress": {
@@ -367,7 +367,7 @@
           "packedQuantity": 0,
           "location": "A-01-02",
           "name": "Motion Sensor",
-          "barcode": "SEN001001"
+          "barcode": "9421234567890"
         },
         {
           "sku": "ARM-SENS-002",
@@ -376,7 +376,7 @@
           "packedQuantity": 0,
           "location": "A-01-03",
           "name": "PIR Motion Detector",
-          "barcode": "SEN002001"
+          "barcode": "9421001234567"
         },
         {
           "sku": "ARM-DOOR-004",
@@ -385,7 +385,7 @@
           "packedQuantity": 0,
           "location": "A-02-05",
           "name": "Door Sensor",
-          "barcode": "DOO004001"
+          "barcode": "9421234567893"
         },
         {
           "sku": "ARM-DOOR-005",
@@ -394,7 +394,7 @@
           "packedQuantity": 0,
           "location": "A-02-06",
           "name": "Magnetic Door Contact",
-          "barcode": "DOO005001"
+          "barcode": "9421001234568"
         },
         {
           "sku": "ARM-CAM-007",
@@ -403,7 +403,7 @@
           "packedQuantity": 0,
           "location": "F-02-02",
           "name": "Security Camera HD",
-          "barcode": "CAM007001"
+          "barcode": "9421234567896"
         },
         {
           "sku": "ARM-CAM-008",
@@ -412,7 +412,7 @@
           "packedQuantity": 0,
           "location": "F-02-03",
           "name": "Dome Security Camera",
-          "barcode": "CAM008001"
+          "barcode": "9421001234569"
         },
         {
           "sku": "ARM-CAM-009",
@@ -421,7 +421,7 @@
           "packedQuantity": 0,
           "location": "F-02-04",
           "name": "PTZ Security Camera",
-          "barcode": "CAM009001"
+          "barcode": "9421001234570"
         },
         {
           "sku": "ARM-CTRL-003",
@@ -430,7 +430,7 @@
           "packedQuantity": 0,
           "location": "B-03-01",
           "name": "Control Panel",
-          "barcode": "CTR003001"
+          "barcode": "9421234567892"
         },
         {
           "sku": "ARM-CTRL-010",
@@ -439,7 +439,7 @@
           "packedQuantity": 0,
           "location": "B-03-02",
           "name": "Smart Control Panel",
-          "barcode": "CTR010001"
+          "barcode": "9421001234571"
         },
         {
           "sku": "ARM-KEY-005",
@@ -448,7 +448,7 @@
           "packedQuantity": 0,
           "location": "C-02-03",
           "name": "Key Fob",
-          "barcode": "KEY005001"
+          "barcode": "9421234567894"
         },
         {
           "sku": "ARM-KEY-011",
@@ -457,7 +457,7 @@
           "packedQuantity": 0,
           "location": "C-02-04",
           "name": "LCD Keypad",
-          "barcode": "KEY011001"
+          "barcode": "9421001234572"
         },
         {
           "sku": "ARM-KEY-012",
@@ -466,7 +466,7 @@
           "packedQuantity": 0,
           "location": "C-02-05",
           "name": "Proximity Reader",
-          "barcode": "KEY012001"
+          "barcode": "9421001234573"
         },
         {
           "sku": "ARM-SIREN-002",
@@ -475,7 +475,7 @@
           "packedQuantity": 0,
           "location": "E-03-01",
           "name": "Outdoor Siren",
-          "barcode": "SIR002001"
+          "barcode": "9421234567891"
         },
         {
           "sku": "ARM-SIREN-013",
@@ -484,7 +484,7 @@
           "packedQuantity": 0,
           "location": "E-03-02",
           "name": "Indoor Siren",
-          "barcode": "SIR013001"
+          "barcode": "9421001234574"
         },
         {
           "sku": "ARM-SMOKE-006",
@@ -493,7 +493,7 @@
           "packedQuantity": 0,
           "location": "D-01-02",
           "name": "Smoke Detector",
-          "barcode": "SMO006001"
+          "barcode": "9421234567895"
         },
         {
           "sku": "ARM-SMOKE-014",
@@ -502,7 +502,7 @@
           "packedQuantity": 0,
           "location": "D-01-03",
           "name": "Photoelectric Smoke Detector",
-          "barcode": "SMO014001"
+          "barcode": "9421001234575"
         },
         {
           "sku": "ARM-PANIC-008",
@@ -511,7 +511,7 @@
           "packedQuantity": 0,
           "location": "A-03-04",
           "name": "Panic Button",
-          "barcode": "PAN008001"
+          "barcode": "9421234567897"
         },
         {
           "sku": "ARM-PANIC-015",
@@ -520,7 +520,7 @@
           "packedQuantity": 0,
           "location": "A-03-05",
           "name": "Emergency Panic Button",
-          "barcode": "PAN015001"
+          "barcode": "9421001234576"
         },
         {
           "sku": "NET-SW-016",
@@ -529,7 +529,7 @@
           "packedQuantity": 0,
           "location": "G-01-01",
           "name": "Network Switch 8-Port",
-          "barcode": "NET016001"
+          "barcode": "9422001234567"
         },
         {
           "sku": "NET-SW-017",
@@ -538,7 +538,7 @@
           "packedQuantity": 0,
           "location": "G-01-02",
           "name": "PoE Network Switch",
-          "barcode": "NET017001"
+          "barcode": "9422001234568"
         },
         {
           "sku": "ACC-KIT-018",
@@ -547,7 +547,7 @@
           "packedQuantity": 0,
           "location": "H-01-01",
           "name": "Touch Kit Interface",
-          "barcode": "ACC018001"
+          "barcode": "9423001234567"
         },
         {
           "sku": "ACC-KIT-019",
@@ -556,7 +556,7 @@
           "packedQuantity": 0,
           "location": "H-01-02",
           "name": "Installation Kit",
-          "barcode": "ACC019001"
+          "barcode": "9423001234568"
         },
         {
           "sku": "BAT-UPS-020",
@@ -565,7 +565,7 @@
           "packedQuantity": 0,
           "location": "I-01-01",
           "name": "Backup Battery 12V",
-          "barcode": "BAT020001"
+          "barcode": "9424001234567"
         },
         {
           "sku": "BAT-UPS-021",
@@ -574,7 +574,7 @@
           "packedQuantity": 0,
           "location": "I-01-02",
           "name": "UPS Power Supply",
-          "barcode": "BAT021001"
+          "barcode": "9424001234568"
         },
         {
           "sku": "CBL-CAT6-022",
@@ -583,7 +583,7 @@
           "packedQuantity": 0,
           "location": "J-01-01",
           "name": "CAT6 Cable 100m",
-          "barcode": "CBL022001"
+          "barcode": "9425001234567"
         },
         {
           "sku": "CBL-PWR-023",
@@ -592,7 +592,7 @@
           "packedQuantity": 0,
           "location": "J-01-02",
           "name": "Power Cable 20m",
-          "barcode": "CBL023001"
+          "barcode": "9425001234568"
         },
         {
           "sku": "MNT-BRK-024",
@@ -601,7 +601,7 @@
           "packedQuantity": 0,
           "location": "K-01-01",
           "name": "Wall Mount Bracket",
-          "barcode": "MNT024001"
+          "barcode": "9426001234567"
         },
         {
           "sku": "MNT-BRK-025",
@@ -610,7 +610,7 @@
           "packedQuantity": 0,
           "location": "K-01-02",
           "name": "Ceiling Mount Bracket",
-          "barcode": "MNT025001"
+          "barcode": "9426001234568"
         },
         {
           "sku": "SIG-AMP-026",
@@ -619,7 +619,7 @@
           "packedQuantity": 0,
           "location": "L-01-01",
           "name": "Signal Amplifier",
-          "barcode": "SIG026001"
+          "barcode": "9427001234567"
         },
         {
           "sku": "PWR-SUP-027",
@@ -628,7 +628,7 @@
           "packedQuantity": 0,
           "location": "M-01-01",
           "name": "Power Supply 12V 5A",
-          "barcode": "PWR027001"
+          "barcode": "9428001234567"
         }
       ],
       "shippingAddress": {

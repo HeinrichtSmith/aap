@@ -8,7 +8,16 @@
     "build": "vite build",
     "preview": "vite preview",
     "terminal-server": "node mock-terminal-server.cjs",
-    "dev:all": "concurrently \"npm run dev\" \"npm run terminal-server\""
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "npm run dev",
+    "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\" --names \"BACKEND,FRONTEND\" --prefix name",
+    "start:all": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\" --names \"BACKEND,FRONTEND\" --prefix name",
+    "start:safe": "node preflight-check.cjs && npm run dev:all",
+    "preflight": "node preflight-check.cjs",
+    "restart:all": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\" --names \"BACKEND,FRONTEND\" --prefix name",
+    "stop": "stop-services.bat",
+    "restart": "stop-services.bat && npm run restart:all",
+    "verify": "verify-services.bat"
   },
   "dependencies": {
     "date-fns": "^2.30.0",

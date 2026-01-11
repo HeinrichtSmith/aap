@@ -47,21 +47,12 @@ const Confetti = ({ active }) => {
 };
 
 const PickingConfirmation = ({ order, pickingTime, onPrintList, onConfirm, onContinue, onEdit, pickingStats, onClose, pickedItems = [] }) => {
-  const { addXP, updateStats } = useWarehouse();
+  const { updateStats } = useWarehouse();
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [isPrinting, setIsPrinting] = useState(false);
   const [hasPrinted, setHasPrinted] = useState(false);
-  const [showXPBreakdown, setShowXPBreakdown] = useState(false);
-  const hasAwardedXP = useRef(false);
-
-  // Enhanced XP calculation
-  const baseXP = 75; // Higher base for picking
-  const speedBonus = pickingTime.time < order.estimatedTime ? 30 : pickingTime.time < order.estimatedTime * 1.5 ? 15 : 0;
-  const accuracyBonus = pickingStats?.perfectStreak ? 40 : 0;
-  const comboBonus = Math.min(pickingStats?.combo || 0, 30) * 2;
-  const efficiencyBonus = pickingStats?.accuracy >= 100 ? 25 : 0;
-  const totalXP = baseXP + speedBonus + accuracyBonus + comboBonus + efficiencyBonus;
+  const hasUpdatedStats = useRef(false);
 
   // Calculate total items picked
   const totalItemsPicked = order.items.reduce((sum, item) => sum + item.quantity, 0);
@@ -75,40 +66,18 @@ const PickingConfirmation = ({ order, pickingTime, onPrintList, onConfirm, onCon
     const timer = setInterval(() => {
       setCurrentStep(prev => prev < 2 ? prev + 1 : prev);
     }, 800);
-    
+
     return () => clearInterval(timer);
   }, []);
 
   useEffect(() => {
-    // Only award XP once per completion
-    if (!hasAwardedXP.current) {
-      hasAwardedXP.current = true;
-      
-      // Completion sound already played in PickingScreen
-      // playSound('complete');
-      
-      // Award XP with delays
-      setTimeout(() => {
-        addXP(baseXP, 'Order Picked');
-        setShowXPBreakdown(true);
-      }, 500);
-      
-      if (speedBonus > 0) {
-        setTimeout(() => addXP(speedBonus, 'Speed Bonus'), 1000);
-      }
-      if (accuracyBonus > 0) {
-        setTimeout(() => addXP(accuracyBonus, 'Perfect Accuracy'), 1500);
-      }
-      if (comboBonus > 0) {
-        setTimeout(() => addXP(comboBonus, 'Combo Bonus'), 2000);
-      }
-      if (efficiencyBonus > 0) {
-        setTimeout(() => addXP(efficiencyBonus, 'Efficiency Bonus'), 2500);
-      }
+    // Only update stats once per completion
+    if (!hasUpdatedStats.current) {
+      hasUpdatedStats.current = true;
 
-      // Update stats
+      // Update stats - Note: ordersProcessed is only incremented when order is SHIPPED, not picked
       updateStats({
-        ordersProcessed: 1,
+        ordersPicked: 1,
         itemsPicked: totalItemsPicked,
         pickingTime: pickingTime.time
       });
@@ -218,11 +187,11 @@ const PickingConfirmation = ({ order, pickingTime, onPrintList, onConfirm, onCon
                 transition={{ delay: 0.7 }}
                 className="bg-gray-800/50 rounded-xl p-6"
               >
-                <Sparkles className="mx-auto mb-3 text-purple-400" size={32} />
-                <p className="text-3xl font-bold text-blue-400">
-                  <AnimatedCounter target={totalXP} duration={1500} prefix="+" suffix=" XP" />
+                <CheckCircle className="mx-auto mb-3 text-green-400" size={32} />
+                <p className="text-3xl font-bold text-green-400">
+                  Complete
                 </p>
-                <p className="text-sm text-gray-400">Earned</p>
+                <p className="text-sm text-gray-400">Order Picked</p>
               </motion.div>
             </div>
 
@@ -259,66 +228,6 @@ const PickingConfirmation = ({ order, pickingTime, onPrintList, onConfirm, onCon
                 </div>
               </div>
             </motion.div>
-
-            {/* XP Breakdown */}
-            {showXPBreakdown && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: "easeOut", delay: 0.9 }}
-                className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-6 mb-8"
-              >
-                <h4 className="font-semibold text-blue-300 mb-4 flex items-center justify-center">
-                  <BarChart3 className="mr-2" size={20} />
-                  XP Breakdown
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                  <div className="flex justify-between">
-                    <span className="flex items-center">
-                      <CheckCircle className="mr-2 text-gray-400" size={16} />
-                      Base Completion
-                    </span>
-                    <span className="text-blue-400 font-bold">+{baseXP}</span>
-                  </div>
-                  {speedBonus > 0 && (
-                    <div className="flex justify-between">
-                      <span className="flex items-center">
-                        <Zap className="mr-2 text-yellow-400" size={16} />
-                        Speed Bonus
-                      </span>
-                      <span className="text-yellow-400 font-bold">+{speedBonus}</span>
-                    </div>
-                  )}
-                  {accuracyBonus > 0 && (
-                    <div className="flex justify-between">
-                      <span className="flex items-center">
-                        <Target className="mr-2 text-green-400" size={16} />
-                        Perfect Accuracy
-                      </span>
-                      <span className="text-green-400 font-bold">+{accuracyBonus}</span>
-                    </div>
-                  )}
-                  {comboBonus > 0 && (
-                    <div className="flex justify-between">
-                      <span className="flex items-center">
-                        <TrendingUp className="mr-2 text-purple-400" size={16} />
-                        Combo Bonus
-                      </span>
-                      <span className="text-purple-400 font-bold">+{comboBonus}</span>
-                    </div>
-                  )}
-                  {efficiencyBonus > 0 && (
-                    <div className="flex justify-between">
-                      <span className="flex items-center">
-                        <Navigation className="mr-2 text-cyan-400" size={16} />
-                        Efficiency Bonus
-                      </span>
-                      <span className="text-cyan-400 font-bold">+{efficiencyBonus}</span>
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            )}
 
             {/* Order Summary */}
             <motion.div

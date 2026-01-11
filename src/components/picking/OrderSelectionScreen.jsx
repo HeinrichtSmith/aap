@@ -14,7 +14,7 @@ import { useDebounce } from '../../hooks/useDebounce';
 // Use central icon mapping function
 import { getItemIconType } from '../../config/gameIconConstants';
 
-// Helper function to determine the most representative icon type for an order
+// Helper function to determine most representative icon type for an order
 const getOrderIconType = (order) => {
   if (!order.items || order.items.length === 0) return 'box';
   
@@ -22,11 +22,11 @@ const getOrderIconType = (order) => {
   const iconCounts = {};
   
   order.items.forEach(item => {
-    const iconType = getItemIconType(item.name, item.sku || item.id);
+    const iconType = getItemIconType(item.name, item.sku);
     iconCounts[iconType] = (iconCounts[iconType] || 0) + item.quantity;
   });
   
-  // Return the icon type with the highest quantity
+  // Return icon type with the highest quantity
   const mostCommonIcon = Object.entries(iconCounts).reduce((a, b) => 
     iconCounts[a[0]] > iconCounts[b[0]] ? a : b
   )[0];
@@ -52,7 +52,7 @@ const OrderSelectionScreen = memo(({ orders, onSelectOrder }) => {
       const success = await initializeAudio();
       if (success) {
         setAudioStatus('initialized');
-        // Don't play a test sound here - let the actual interaction sound play
+        // Don't play a test sound here - let's actual interaction sound play
       } else {
         setAudioStatus('failed');
       }
@@ -83,12 +83,12 @@ const OrderSelectionScreen = memo(({ orders, onSelectOrder }) => {
 
   const getPriorityColor = useCallback((priority) => {
     switch (priority) {
-      case 'urgent': 
-        return 'from-red-500/20 to-red-600/10';
-      case 'overnight': 
-        return 'from-orange-500/20 to-orange-600/10';
-      default: 
-        return 'from-blue-500/20 to-blue-600/10';
+      case 'urgent':
+        return 'from-red-600/20 to-red-700/10';
+      case 'overnight':
+        return 'from-amber-600/20 to-amber-700/10';
+      default:
+        return 'from-[#3A86B6]/20 to-[#2A7696]/10';
     }
   }, []);
 
@@ -102,21 +102,30 @@ const OrderSelectionScreen = memo(({ orders, onSelectOrder }) => {
   // Filter orders based on debounced search query
   const filteredOrders = useMemo(() => {
     if (!debouncedSearchQuery) return sortedOrders;
-    const query = debouncedSearchQuery.toLowerCase();
+    const query = debouncedSearchQuery.toLowerCase().trim();
+    
+    // Helper function to safely normalize strings to lowercase
+    const safeString = (value) => String(value ?? '').toLowerCase().trim();
+    
     return sortedOrders.filter(order => (
-      order.orderId.toLowerCase().includes(query) ||
-      order.customer.toLowerCase().includes(query) ||
-      order.items.some(item => item.name.toLowerCase().includes(query))
+      safeString(order.orderId).includes(query) ||
+      safeString(order.customer).includes(query) ||
+      order.items.some(item => safeString(item.name).includes(query))
     ));
   }, [sortedOrders, debouncedSearchQuery]);
 
   // Format estimated time to minutes:seconds
   const formatEstimatedTime = useCallback((seconds) => {
+    // DEFENSIVE: Handle null/undefined/NaN
+    if (!seconds || isNaN(seconds) || seconds < 0) {
+      return '--:--';
+    }
+    
     const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
+    const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   }, []);
-
+  
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       {/* Audio status indicator */}
@@ -126,17 +135,16 @@ const OrderSelectionScreen = memo(({ orders, onSelectOrder }) => {
         </div>
       )}
       
-      
       <div className="text-center">
         <div className="flex items-center justify-center mb-4">
-          <Package className="text-blue-400 mr-3" size={48} />
-          <h1 className="text-6xl font-bold text-white tracking-tight bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+          <Package className="text-[#3A86B6] mr-3" size={48} />
+          <h1 className="text-6xl font-bold text-white tracking-tight bg-gradient-to-r from-[#E6EAF0] to-[#A0A7B4] bg-clip-text text-transparent">
             Pick Orders
           </h1>
         </div>
-        <p className="text-xl text-gray-400 flex items-center justify-center">
+        <p className="text-xl text-[#A0A7B4] flex items-center justify-center">
           <Package className="mr-2" size={20} />
-          Select an order to begin picking items from the warehouse
+          Select an order to begin picking items from warehouse
         </p>
       </div>
 
@@ -149,11 +157,10 @@ const OrderSelectionScreen = memo(({ orders, onSelectOrder }) => {
             placeholder="Search by order number, customer, or item..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-gray-800/50 border border-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 rounded-xl text-white placeholder-gray-400 outline-none transition-all duration-200"
+            className="w-full pl-12 pr-4 py-3 bg-[#151A20] border border-[#1F2630] focus:ring-2 focus:ring-[#3A86B6]/20 focus:border-[#3A86B6] rounded-xl text-[#E6EAF0] placeholder-[#6B7280] outline-none transition-all duration-200"
           />
         </div>
       </div>
-
       
       {/* Order Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 max-w-[2400px] mx-auto">
@@ -175,25 +182,25 @@ const OrderSelectionScreen = memo(({ orders, onSelectOrder }) => {
             onMouseEnter={() => playSound('hover')}
             className="group cursor-pointer"
           >
-            <div className="bg-gray-900/50 backdrop-blur-xl rounded-3xl p-6 h-full hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-300 hover:border-blue-500/50 border border-gray-800 relative overflow-hidden">
+            <div className="bg-[#151A20] backdrop-blur-xl rounded-xl p-6 h-full hover:shadow-2xl hover:shadow-[#3A86B6]/20 transition-all duration-300 hover:border-[#3A86B6]/50 border border-[#1F2630] relative overflow-hidden">
               <div className={`absolute inset-0 bg-gradient-to-br ${getPriorityColor(order.priority)} opacity-50`} />
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 via-purple-500/0 to-blue-500/0 group-hover:from-blue-500/10 group-hover:via-purple-500/5 group-hover:to-blue-500/10 rounded-3xl transition-all duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[#3A86B6]/0 via-[#3A86B6]/0 to-[#3A86B6]/0 group-hover:from-[#3A86B6]/10 group-hover:via-[#3A86B6]/5 group-hover:to-[#3A86B6]/10 rounded-xl transition-all duration-500" />
               
               <div className="relative">
                 <div className="text-center mb-4">
-                  <h2 className="text-2xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors flex items-center justify-center">
+                  <h2 className="text-2xl font-bold text-[#E6EAF0] mb-2 group-hover:text-[#4A96C6] transition-colors flex items-center justify-center">
                     <Barcode className="mr-2" size={24} />
                     {order.orderId}
                   </h2>
-                  <p className="text-sm text-gray-600 flex items-center justify-center">
+                  <p className="text-sm text-[#A0A7B4] flex items-center justify-center">
                     <User className="mr-1" size={14} />
                     {order.customer}
                   </p>
-                  <p className="text-xs text-gray-600 mt-1 flex items-center justify-center">
+                  <p className="text-xs text-[#6B7280] mt-1 flex items-center justify-center">
                     <Calendar className="mr-1" size={12} />
                     Due: {formatDate(order.dueDate)}
                   </p>
-                  <p className="text-xs text-gray-600 mt-1 flex items-center justify-center">
+                  <p className="text-xs text-[#6B7280] mt-1 flex items-center justify-center">
                     <Clock className="mr-1" size={12} />
                     Est: {formatEstimatedTime(order.estimatedTime)}
                   </p>
@@ -208,7 +215,7 @@ const OrderSelectionScreen = memo(({ orders, onSelectOrder }) => {
                         </p>
                         <p className="text-xs text-gray-600 group-hover:text-gray-500 transition-colors flex items-center">
                           <Barcode className="mr-1 flex-shrink-0" size={12} />
-                          <span className="truncate">{item.id}</span>
+                          <span className="truncate">{item.sku || 'UNKNOWN'}</span>
                         </p>
                       </div>
                       <span className="font-bold text-gray-400 ml-2 group-hover:text-gray-300 transition-colors">
