@@ -1,0 +1,11 @@
+Minimize client‑only code (useEffect/useState) where unnecessary.
+
+Dynamically import non‑critical components.
+
+Optimize images (WebP, width/height, lazy-loading).
+
+Memoize expensive computations with useMemo.
+
+Wrap pure components in React.memo.
+
+Structure modules for effective tree‑shaking.
